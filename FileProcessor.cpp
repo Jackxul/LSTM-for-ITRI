@@ -30,7 +30,8 @@ std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine)
                 try{
                     values.push_back(std::stod(line));
                 } catch (std::exception& e) {
-                    std::cout<<std::endl<<"Error in line "<<lineNo<<": "<<e.what()<<std::endl;
+		    std::cout<<std::endl<<fileName<<","<<line<<std::endl;
+                    std::cout<<std::endl<<"1 Error in line "<<lineNo<<": "<<e.what()<<std::endl;
                 }    
             }
         }
@@ -74,7 +75,8 @@ std::vector<double> * FileProcessor::readMultivariate(std::string fileName, int 
                 std::vector<double> input (variables-1,0.0);
                 data[lineNo-1] = input;
                 target.push_back(0.0);
-                std::cout<<std::endl<<"Error in line "<<lineNo<<": "<<e.what()<<std::endl;
+                std::cout<<std::endl<<fileName<<","<<line<<std::endl;
+                std::cout<<std::endl<<"22Error in line "<<lineNo<<": "<<e.what()<<std::endl;
             }    
             if (lineNo == lines) break;
         }
@@ -113,15 +115,21 @@ int FileProcessor::writeUniVariate(std::string fileName, std::string outFileName
                 lineNo++;
                 try{
                     std::stringstream ss(line);
+		    std::cout<<line<<std::endl;
                     tokenNo = 0;
                     while(std::getline(ss, token, ',')) {
                         if (tokenNo == columnIndx) {
-                            out_file<<token<<"\n";
+				std::cout<<token<<std::endl;
+                            	out_file<<token<<"\n";
                         }
-                        tokenNo++;
+			else{
+				std::cout<<token;
+				//out_file<<token<<",";
+                        	tokenNo++;
+			}
                     }
                 } catch (std::exception& e) {
-                    std::cout<<std::endl<<"Error in line "<<lineNo<<": "<<e.what()<<std::endl;
+                    std::cout<<std::endl<<"33Error in line "<<lineNo<<": "<<e.what()<<std::endl;
                 }    
             }
         } 

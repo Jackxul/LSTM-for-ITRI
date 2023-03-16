@@ -6,6 +6,7 @@
  */
 
 #include <vector>
+#include <unistd.h>
 
 #include "LSTMNet.h"
 #include "DataProcessor.h"
@@ -41,14 +42,16 @@ int univarPredicts() {
 //    fileProc->writeUniVariate("datasets/data.csv","datasets/data.txt",2,1);
 //    fileProc->writeUniVariate("datasets/monthlySunspotNumbers.csv","datasets/monthlySunspotNumbers.txt",2,1);
 //    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
+//fileProc->writeUniVariate("datasets/Test.csv","datasets/Test.txt",4,2);    
+fileProc->writeUniVariate("datasets/Test2.csv","datasets/Test2.txt",4,1);    
     
     
     ///////////// Data Sets //////////////////////////////
     
     std::string datasets[] = {
-        /* 0*/ "dummy2.txt",
+        /* 0*/ "Test2.txt",
         /* 1*/ "InternetTraff.txt",
-        /* 2*/ "monthlyReturnsOfValueweighted.txt",
+        /* 2*/ "Test2.txt",
         /* 3*/ "treeAlmagreMountainPiarLocat.txt",
         /* 4*/ "dailyCyclistsAlongSudurlandsb.txt",
         /* 5*/ "totalPopulation.txt",
@@ -64,8 +67,11 @@ int univarPredicts() {
         /* 1*/ "dailyMinimumTemperaturesAnml.txt"
     };
     
-    std::string inFile = datasets[1];
+    std::string inFile = datasets[0];
+    std::cout<<"read file session"<<std::endl;
     timeSeries = fileProc->read("datasets/univariate/input/"+inFile,1);
+
+    std::cout<<"End read file session"<<std::endl;
     timeSeries =  dataproc->process(timeSeries,1);
     
     // Creating the input vector Array
@@ -95,7 +101,7 @@ int univarPredicts() {
     // Open the file to write the time series predictions
     std::ofstream out_file;
     out_file.open("datasets/univariate/predictions/"+inFile,std::ofstream::out | std::ofstream::trunc);
-    
+    std::cout<<"Create predictions file"<<std::endl; 
     std::vector<double> inVec;
     input = new std::vector<double>[1];
     double result;
@@ -123,7 +129,7 @@ int univarPredicts() {
         
         expected = timeSeries.at(i+inputVecSize+1);
         //MSE += std::pow(expected-result,2);
-        
+	std::cout<<i<<std::endl; 
         result = dataproc->postProcess(result);
         out_file<<result-20000<<"\n";
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
@@ -351,7 +357,8 @@ int main() {
 
     // predicting univariate time series
     univarPredicts();
-    
+    std::cout<<"-----multivariate starts now-----"<<std::endl;
+    sleep(10);
     // predicting multivariate series
     //multivarPredicts();
 
