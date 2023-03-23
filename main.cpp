@@ -67,7 +67,7 @@ fileProc->writeUniVariate("datasets/Test2.csv","datasets/Test2.txt",4,1);
         /* 1*/ "dailyMinimumTemperaturesAnml.txt"
     };
     
-    std::string inFile = datasets[0];
+    std::string inFile = datasets[9];
     std::cout<<"read file session"<<std::endl;
     timeSeries = fileProc->read("datasets/univariate/input/"+inFile,1);
 
@@ -131,7 +131,8 @@ fileProc->writeUniVariate("datasets/Test2.csv","datasets/Test2.txt",4,1);
         //MSE += std::pow(expected-result,2);
 	std::cout<<i<<std::endl; 
         result = dataproc->postProcess(result);
-        out_file<<result-20000<<"\n";
+	std::cout<<"result after change => "<<result<<std::endl; 
+ 	out_file<<result-20000<<"\n";
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
     }
   
