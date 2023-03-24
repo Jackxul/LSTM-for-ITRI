@@ -197,7 +197,7 @@ int multivarPredicts() {
         input[0] = dataproc->process(timeSeries[i],0);
         result = lstm->predict(input);
         resultVec.push_back(result);
-        //std::cout<<std::endl<<"result: "<<result<<"  ==>  expected: "<<timeSeries[lines].at(i)<<std::endl;
+        std::cout<<std::endl<<"result: "<<result<<"  ==>  expected: "<<timeSeries[lines].at(i)<<std::endl;
         
         if (i == 0){
             min = result;
@@ -361,6 +361,6 @@ int main() {
     std::cout<<"-----multivariate starts now-----"<<std::endl;
     sleep(10);
     // predicting multivariate series
-    //multivarPredicts();
+    multivarPredicts();
 
 }
