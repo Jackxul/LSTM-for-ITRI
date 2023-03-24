@@ -350,9 +350,9 @@ int multivarPredicts() {
 int main() {
 
     // predicting univariate time series
-    univarPredicts();
+    //univarPredicts();
     
     // predicting multivariate series
-    //multivarPredicts();
+    multivarPredicts();
 
 }
