@@ -12,23 +12,6 @@
 #include "DataProcessor.h"
 #include "FileProcessor.h"
 
-int univarPredicts() {
-    
-    int memCells = 5; // number of memory cells
-    int trainDataSize = 300; // train data size
-    int inputVecSize = 60; // input vector size
-    int timeSteps = 60; // unfolded time steps
-    float learningRate = 0.01;
-    int predictions = 1300; // prediction points
-    int iterations = 10; // training iterations with training data
-    
-    // Adding the time series in to a vector and preprocessing
-    DataProcessor * dataproc;
-    dataproc = new DataProcessor();
-    FileProcessor * fileProc;
-    fileProc = new FileProcessor();
-    std::vector<double> timeSeries;
-    
     
     ////////// Converting the CVS ////////////////////////    
     
@@ -43,104 +26,6 @@ int univarPredicts() {
 //    fileProc->writeUniVariate("datasets/monthlySunspotNumbers.csv","datasets/monthlySunspotNumbers.txt",2,1);
 //    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
 //fileProc->writeUniVariate("datasets/Test.csv","datasets/Test.txt",4,2);    
-fileProc->writeUniVariate("datasets/Test2.csv","datasets/Test2.txt",4,1);    
-    
-    
-    ///////////// Data Sets //////////////////////////////
-    
-    std::string datasets[] = {
-        /* 0*/ "Test2.txt",
-        /* 1*/ "InternetTraff.txt",
-        /* 2*/ "Test2.txt",
-        /* 3*/ "treeAlmagreMountainPiarLocat.txt",
-        /* 4*/ "dailyCyclistsAlongSudurlandsb.txt",
-        /* 5*/ "totalPopulation.txt",
-        /* 6*/ "numberOfUnemployed.txt",
-        /* 7*/ "data.txt",
-        /* 8*/ "monthlySunspotNumbers.txt",
-        /* 9*/ "dailyMinimumTemperatures.txt",
-        /*10*/ "hr2.txt"
-    };
-    
-    std::string datasets2[] = {
-        /* 0*/ "dummy2Anml.txt",
-        /* 1*/ "dailyMinimumTemperaturesAnml.txt"
-    };
-    
-    std::string inFile = datasets[9];
-    std::cout<<"read file session"<<std::endl;
-    timeSeries = fileProc->read("datasets/univariate/input/"+inFile,1);
-
-    std::cout<<"End read file session"<<std::endl;
-    timeSeries =  dataproc->process(timeSeries,1);
-    
-    // Creating the input vector Array
-    std::vector<double> * input;
-    input = new std::vector<double>[trainDataSize];
-    std::vector<double> inputVec;
-    
-    for (int i = 0; i < trainDataSize; i++) {
-        inputVec.clear();
-        for (int j = 0; j < inputVecSize; j++) {
-            inputVec.push_back(timeSeries.at(i+j));
-        }
-        inputVec =  dataproc->process(inputVec,0);
-        input[i] = inputVec; 
-    }
-    
-    
-    // Creating the target vector using the time series 
-    std::vector<double>::const_iterator first = timeSeries.begin() + inputVecSize;
-    std::vector<double>::const_iterator last = timeSeries.begin() + inputVecSize + trainDataSize;
-    std::vector<double> targetVector(first, last);
-    
-    // Training the LSTM net
-    LSTMNet lstm(memCells,inputVecSize);
-    lstm.train(input, targetVector, trainDataSize, timeSteps, learningRate, iterations);
-  
-    // Open the file to write the time series predictions
-    std::ofstream out_file;
-    out_file.open("datasets/univariate/predictions/"+inFile,std::ofstream::out | std::ofstream::trunc);
-    std::cout<<"Create predictions file"<<std::endl; 
-    std::vector<double> inVec;
-    input = new std::vector<double>[1];
-    double result;
-    double expected;
-    //double MSE = 0;
-    
-    for (int i = 0; i < inputVecSize; i++) {
-        out_file<<dataproc->postProcess(timeSeries.at(i))<<"\n";
-    }
-    
-    std::cout << std::fixed;
-    
-    for (int i = 0; i < predictions; i++) {
-        
-        inVec.clear();
-        for (int j = 0; j < inputVecSize; j++) {
-            inVec.push_back(timeSeries.at(i+j));
-        }
-        
-        inVec = dataproc->process(inVec,0);
-        input[0] = inVec;
-        
-        result = lstm.predict(input);
-        std::cout<<std::endl<<"result: "<<result<<std::endl;
-        
-        expected = timeSeries.at(i+inputVecSize+1);
-        //MSE += std::pow(expected-result,2);
-	std::cout<<i<<std::endl; 
-        result = dataproc->postProcess(result);
-	std::cout<<"result after change => "<<result<<std::endl; 
- 	out_file<<result-20000<<"\n";
-        std::cout<<"result processed: "<<result<<std::endl<<std::endl;
-    }
-  
-    //MSE /= predictions;
-    //std::cout<<"Mean Squared Error: "<<MSE<<"\n";
-    std::cout << std::scientific;
-    return 0;
-}
 
 int multivarPredicts() {
 
@@ -356,8 +241,6 @@ int multivarPredicts() {
 
 int main() {
 
-    // predicting univariate time series
-    univarPredicts();
     std::cout<<"-----multivariate starts now-----"<<std::endl;
     sleep(10);
     // predicting multivariate series
