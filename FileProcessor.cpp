@@ -19,6 +19,63 @@ FileProcessor::~FileProcessor() { }
 	
 int FileProcessor::Delete_column(std::string fileName, std::string outFileName, int targetCol) {
 	
+    std::string line;
+    std::ifstream file (fileName);
+    std::string token;
+    int tokenNo = 0;
+    
+    int lineNo = 0;
+    
+    std::ofstream out_file;
+    out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
+    
+    if (file.is_open()) {
+            while ( getline (file,line) ) {
+               	try{
+                    std::stringstream ss(line);
+		    for(char count : line){
+			if(count == ',')
+				tokenNo++;
+		    }
+                    if(std::getline(ss, token, '\n')){
+                       // if (tokenNo == columnIndx) {
+			//std::cout<<token;
+			//std::cout<<token<<std::endl;
+
+
+			//while(std::getline(ss,token,',')){
+			//	std::cout<<token<<std::endl;
+			//	tokenNo++;
+			//}
+			if((targetCol < 0) || (tokenNo < targetCol)){
+				std::cout<<"tokenNo = "<<tokenNo<<std::endl;
+				std::cout<<"Error in target column"<<std::endl;
+				return 0;
+			}
+			//std::cout<<"Token reset"<<std::endl;
+			tokenNo = 0;
+			while(std::getline(ss ,token , ',')){
+				if(tokenNo == targetCol){
+					tokenNo++;
+				}
+				else{
+					out_file<<token<<",";
+					tokenNo++;
+				}
+				
+			}
+			//	out_file<<token<<",";
+                        out_file<<token<<"\n";
+                       // }
+			}	
+                } catch (std::exception& e) {
+                    std::cout<<std::endl<<"33Error in line "<<lineNo<<": "<<e.what()<<std::endl;
+                }   
+            }
+        file.close();
+    }
+    else std::cout << "Unable to open file '"<<fileName<<"'"; 
+    return 0;   
 
 
 }
@@ -125,7 +182,7 @@ int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
 		//std::cout<<line<<std::endl;
                	try{
                     std::stringstream ss(line);
-		    std::cout<<"line no.= "<<lineNo<<std::endl<<"line = "<<line<<std::endl;
+		    //std::cout<<"line no.= "<<lineNo<<std::endl<<"line = "<<line<<std::endl;
                    if(std::getline(ss, token, '\n')){
                        // if (tokenNo == columnIndx) {
 			//std::cout<<token;

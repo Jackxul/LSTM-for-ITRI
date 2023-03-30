@@ -31,8 +31,9 @@ void dataconvert(){
 	FileProcessor * fileProc;
 	fileProc = new FileProcessor();
 //Multi Dataset File from Csv to Txt
-	fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
+	//fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
 
+	fileProc->Delete_column("datasets/output2.csv","datasets/modify.txt",9);    
 
 }
 int multivarPredicts() {
