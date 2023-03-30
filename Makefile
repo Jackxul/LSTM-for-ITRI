@@ -16,7 +16,7 @@ build: .build-post
 
 # clean
 clean: .clean-post
-
+	@rm  -rf dist
 .clean-pre:
 # Add your pre 'clean' code here...
 
