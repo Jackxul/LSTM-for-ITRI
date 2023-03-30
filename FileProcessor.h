@@ -60,7 +60,26 @@ public:
      * @return 0
      */
     int Csv_to_Txt(std::string fileName, std::string outFileName);
-    
+   	/*
+	 *input csv file
+	 *output text file
+	 *use getline to read and write
+	 *Jack_Xul
+	 * */ 
+    int Delete_column(std::string fileName, std::string outFileName , int targetCol);
+	/*
+	 *input text file
+	 *output text file
+	 *targetCol = The number of Column that want to delete.
+	 *Jack_Xul
+	 * */
+    int Delete_row(std::string fileName, std::string outFileName , int targetRow);
+	/*
+	 *input text file
+	 *output text file
+	 *targetRow = The number of Row that want to delete.
+	 *Jack_Xul
+	 * */
 private:
     std::ofstream out_file;
 

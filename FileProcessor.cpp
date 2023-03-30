@@ -8,7 +8,6 @@
 #include <vector>
 #include <exception>
 #include <sstream>
-
 #include "FileProcessor.h"
 
 FileProcessor::FileProcessor() { }
@@ -17,6 +16,17 @@ FileProcessor::FileProcessor(const FileProcessor& orig) { }
 
 FileProcessor::~FileProcessor() { }
 
+	
+int FileProcessor::Delete_column(std::string fileName, std::string outFileName, int targetCol) {
+	
+
+
+}
+int FileProcessor::Delete_row(std::string fileName, std::string outFileName, int targetRow) {
+	
+
+
+}
 std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine) {
     
     std::vector<double> values;
