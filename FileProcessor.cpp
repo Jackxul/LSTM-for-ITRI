@@ -112,25 +112,21 @@ int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
     if (file.is_open()) {
             while ( getline (file,line) ) {
                 lineNo++;
-		std::cout<<line<<std::endl;
-               /* try{
+		//std::cout<<line<<std::endl;
+               	try{
                     std::stringstream ss(line);
-		    std::cout<<line<<std::endl;
-                    tokenNo = 0;
-                    while(std::getline(ss, token, ',')) {
-                        if (tokenNo == columnIndx) {
-				std::cout<<token<<std::endl;
-                            	out_file<<token<<"\n";
-                        }
-			else{
-				std::cout<<token;
-				//out_file<<token<<",";
-                        	tokenNo++;
-			}
-                    }
+		    std::cout<<"line no.= "<<lineNo<<std::endl<<"line = "<<line<<std::endl;
+                   if(std::getline(ss, token, '\n')){
+                       // if (tokenNo == columnIndx) {
+			//std::cout<<token;
+			while(std::getline(ss ,token , ','))
+				out_file<<token<<",";
+                        out_file<<token<<"\n";
+                       // }
+			}	
                 } catch (std::exception& e) {
                     std::cout<<std::endl<<"33Error in line "<<lineNo<<": "<<e.what()<<std::endl;
-                }   */ 
+                }   
             }
         file.close();
     }
