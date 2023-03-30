@@ -28,6 +28,8 @@
 //    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
 //fileProc->writeUniVariate("datasets/Test.csv","datasets/Test.txt",4,2);    
 
+FileProcessor * fileProc;
+fileProc = new FileProcessor();
 //Multi Dataset File from Csv to Txt
 fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
 
