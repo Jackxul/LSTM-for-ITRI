@@ -98,7 +98,7 @@ int FileProcessor::append(std::string line) {
     return 0;
 }
 
-int FileProcessor::writeUniVariate(std::string fileName, std::string outFileName, int valuesPerLine, int columnIndx) {
+int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
     
     std::string line;
     std::ifstream file (fileName);
@@ -110,10 +110,10 @@ int FileProcessor::writeUniVariate(std::string fileName, std::string outFileName
     out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
     
     if (file.is_open()) {
-        if (valuesPerLine > 1) {
             while ( getline (file,line) ) {
                 lineNo++;
-                try{
+		std::cout<<line<<std::endl;
+               /* try{
                     std::stringstream ss(line);
 		    std::cout<<line<<std::endl;
                     tokenNo = 0;
@@ -130,9 +130,8 @@ int FileProcessor::writeUniVariate(std::string fileName, std::string outFileName
                     }
                 } catch (std::exception& e) {
                     std::cout<<std::endl<<"33Error in line "<<lineNo<<": "<<e.what()<<std::endl;
-                }    
+                }   */ 
             }
-        } 
         file.close();
     }
     else std::cout << "Unable to open file '"<<fileName<<"'"; 

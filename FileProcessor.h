@@ -59,7 +59,7 @@ public:
      * @param columnIndx: variable written to the output file
      * @return 0
      */
-    int writeUniVariate(std::string fileName, std::string outFileName, int valuesPerLine, int columnIndx);
+    int Csv_to_Txt(std::string fileName, std::string outFileName);
     
 private:
     std::ofstream out_file;

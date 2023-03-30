@@ -28,6 +28,9 @@
 //    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
 //fileProc->writeUniVariate("datasets/Test.csv","datasets/Test.txt",4,2);    
 
+//Multi Dataset File from Csv to Txt
+fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
+
 int multivarPredicts() {
 
     ///////////////////////// Multivariate time series data prediction ////////////////////////////////////
@@ -79,8 +82,22 @@ int multivarPredicts() {
     double result;
     double min = 0, max = 0;
     std::vector<double> resultVec;
-    for (int i = 0; i < predictions; i++) {    
+    for (int i = 0; i < predictions; i++) {   
         input[0] = dataproc->process(timeSeries[i],0);
+	std::cout<<"Input["<<i<<"] = ";
+
+
+
+
+	for(std::vector<double>::iterator pv = input->begin();pv != input->end();pv++)
+		std::cout<<*pv<<",";
+	std::cout<<"\b";
+	std::cout<<" ";
+	std::cout<<std::endl;
+
+
+
+	std::cout<<std::endl;
         result = lstm->predict(input);
         resultVec.push_back(result);
         std::cout<<std::endl<<"result: "<<result<<"  ==>  expected: "<<timeSeries[lines].at(i)<<std::endl;
@@ -243,7 +260,6 @@ int multivarPredicts() {
 int main() {
 
     std::cout<<"-----multivariate starts now-----"<<std::endl;
-    sleep(10);
     // predicting multivariate series
     multivarPredicts();
 
