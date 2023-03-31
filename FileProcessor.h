@@ -59,6 +59,14 @@ public:
      * @param columnIndx: variable written to the output file
      * @return 0
      */
+    int Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName);
+    /*
+     *trainFileName = Training File
+     *testFileName = Datatest File
+     *valFileName = Datatest Fil
+     *Split the text file after convert into three part
+     *Jack_Xul
+     * */
     int Csv_to_Txt(std::string fileName, std::string outFileName);
    	/*
 	 *input csv file
@@ -80,9 +88,13 @@ public:
 	 *targetRow = The number of Row that want to delete.
 	 *Jack_Xul
 	 * */
+    int Set_row(int rowval);
+
+    int Set_col(int colval);
 private:
     std::ofstream out_file;
-
+    unsigned int p_row;
+    unsigned int p_col;
 };
 
 #endif /* FILEPROCESSOR_H */
