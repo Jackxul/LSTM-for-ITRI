@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <mutex>
 
 class FileProcessor {
 public:
@@ -92,6 +93,8 @@ public:
 
     int Set_col(int colval);
 private:
+    std::mutex mtx;
+
     std::ofstream out_file;
     unsigned int p_row;
     unsigned int p_col;

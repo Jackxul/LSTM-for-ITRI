@@ -17,6 +17,14 @@ FileProcessor::FileProcessor(const FileProcessor& orig) { }
 FileProcessor::~FileProcessor() { }
 
 
+int FileProcessor::Set_col(int colval){
+	mtx.lock();
+	p_col = colval;
+	std::cout<<"colval = "<<colval<<std::endl;
+	std::cout<<"p_col = "<<p_col<<std::endl;
+	mtx.unlock();
+	return p_col;
+}
 int FileProcessor::Set_row(int rowval){
 	p_row = rowval;
 	std::cout<<"Rowval = "<<rowval<<std::endl;
@@ -73,7 +81,7 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 			//	out_file<<token<<",";
                         out_file<<token<<"\n";
                        // }
-			}	
+		     }	
                 } catch (std::exception& e) {
                     std::cout<<std::endl<<"33Error in line "<<lineNo<<": "<<e.what()<<std::endl;
                 }   
@@ -88,7 +96,7 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 int FileProcessor::Delete_row(std::string fileName, std::string outFileName, int targetRow) {
 	
 
-
+	return 0;
 }
 std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine) {
     
@@ -208,6 +216,5 @@ int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
     
     std::cout<<"TokenNo = "<<tokenNo<<std::endl;
     std::cout<<"LineNo = "<<lineNo<<std::endl;
-    std::cout<<"LineNo = "<<Set_row(1234)<<std::endl;
     return 0;   
 }
