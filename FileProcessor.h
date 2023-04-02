@@ -90,8 +90,15 @@ public:
 	 *Jack_Xul
 	 * */
     int Set_row(int rowval);
-
+	/*
+	 *Set private row value
+	 *Jack_Xul
+	 * */
     int Set_col(int colval);
+	/*
+	 *Set private column value
+	 *Jack_Xul
+	 * */
 private:
     std::mutex mtx;
 

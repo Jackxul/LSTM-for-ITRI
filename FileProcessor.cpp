@@ -20,17 +20,19 @@ FileProcessor::~FileProcessor() { }
 int FileProcessor::Set_col(int colval){
 	mtx.lock();
 	p_col = colval;
-	std::cout<<"colval = "<<colval<<std::endl;
-	std::cout<<"p_col = "<<p_col<<std::endl;
+	std::cout<<"Set p_col => "<<p_col<<std::endl;
 	mtx.unlock();
 	return p_col;
 }
 int FileProcessor::Set_row(int rowval){
+	mtx.lock();
 	p_row = rowval;
-	std::cout<<"Rowval = "<<rowval<<std::endl;
-	std::cout<<"p_row = "<<p_row<<std::endl;
+	std::cout<<"Set p_row => "<<p_row<<std::endl;
+	mtx.unlock();
 	return p_row;
 }
+
+// NDY  //
 int FileProcessor::Delete_column(std::string fileName, std::string outFileName, int targetCol) {
 	
     std::string line;
@@ -47,21 +49,8 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
             while ( getline (file,line) ) {
                	try{
                     std::stringstream ss(line);
-		    for(char count : line){
-			if(count == ',')
-				tokenNo++;
-		    }
                     if(std::getline(ss, token, '\n')){
-                       // if (tokenNo == columnIndx) {
-			//std::cout<<token;
-			//std::cout<<token<<std::endl;
-
-
-			//while(std::getline(ss,token,',')){
-			//	std::cout<<token<<std::endl;
-			//	tokenNo++;
-			//}
-			if((targetCol < 0) || (tokenNo < targetCol)){
+                       if((targetCol < 0) || (tokenNo < targetCol)){
 				std::cout<<"tokenNo = "<<tokenNo<<std::endl;
 				std::cout<<"Error in target column"<<std::endl;
 				return 0;
@@ -90,13 +79,50 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
     }
     else std::cout << "Unable to open file '"<<fileName<<"'"; 
     return 0;   
-
-
 }
-int FileProcessor::Delete_row(std::string fileName, std::string outFileName, int targetRow) {
-	
+
+// NDY //
+int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName){
 
 	return 0;
+}
+
+// WFM //
+int FileProcessor::Delete_row(std::string fileName, std::string outFileName, int targetRow) {
+	std::string line;
+    	std::ifstream file (fileName);
+    	std::string token;
+    	int lineNo = 0;
+    
+    	std::ofstream out_file;
+    	out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
+    
+    	if (file.is_open()) {
+        	while ( getline (file,line) ) {
+			lineNo++;
+			if(targetRow <= 0 || targetRow > p_row){
+				std::cout<<"Error in row range"<<std::endl;
+				return 0;
+			}
+			else if(lineNo == targetRow)
+				continue;
+			else{
+               			try{
+                    			std::stringstream ss(line);
+                    			if(std::getline(ss, token, '\n')){
+						while(std::getline(ss ,token , ','))
+							out_file<<token<<",";
+                        			out_file<<token<<"\n";
+		     			}	
+                		} catch (std::exception& e) {
+                    			std::cout<<std::endl<<"Delete_row_Error in line "<<lineNo<<": "<<e.what()<<std::endl;
+                		}  
+			}
+            	}
+        	file.close();
+    	}
+    	else std::cout << "Unable to open file '"<<fileName<<"'"; 
+    	return 0;
 }
 std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine) {
     
@@ -180,17 +206,27 @@ int FileProcessor::append(std::string line) {
 }
 
 int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
-    
+   
+/*declaration*/
     std::string line;
     std::ifstream file (fileName);
     std::string token;
-    int tokenNo = 0;
+    int tokenNo = 1;
     int lineNo = 0;
-    
+    std::string *countline = new std::string;
     std::ofstream out_file;
     out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
     
     if (file.is_open()) {
+	getline(file,*countline);
+	for(char count : *countline)
+		if(count ==',')
+			tokenNo++;
+		
+	/*Clear the contents of string*/
+	countline->clear();
+	/*Memory free for string countline*/
+	delete countline;
             while ( getline (file,line) ) {
                 lineNo++;
 		//std::cout<<line<<std::endl;
@@ -214,7 +250,9 @@ int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
     }
     else std::cout << "Unable to open file '"<<fileName<<"'"; 
     
-    std::cout<<"TokenNo = "<<tokenNo<<std::endl;
-    std::cout<<"LineNo = "<<lineNo<<std::endl;
+    //std::cout<<"TokenNo = "<<tokenNo<<std::endl;
+    //std::cout<<"LineNo = "<<lineNo<<std::endl;
+    Set_row(lineNo);
+    Set_col(tokenNo);
     return 0;   
 }
