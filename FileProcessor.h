@@ -99,6 +99,16 @@ public:
 	 *Set private column value
 	 *Jack_Xul
 	 * */
+    int Show_p_row();
+    	/*
+	 *Return p_row
+	 *Jack_Xul
+	 * */
+    int Show_p_col();
+    	/*
+	 *Return p_col
+	 *Jack_Xul
+	 * */
 private:
     std::mutex mtx;
 

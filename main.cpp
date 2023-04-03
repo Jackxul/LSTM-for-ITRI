@@ -31,9 +31,9 @@ void dataconvert(){
 	FileProcessor * fileProc;
 	fileProc = new FileProcessor();
 //Multi Dataset File from Csv to Txt
-	fileProc->Csv_to_Txt("datasets/output.csv","datasets/output2.txt");    
+	fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
 	
-	fileProc->Delete_row("datasets/output.txt","datasets/AFD.txt",7563);
+	fileProc->Delete_row("datasets/output.txt","datasets/ADF.txt",8000);
 	/* Test function
 	 * fileProc->Set_row(1233);
 	 * fileProc->Set_col(4566);
@@ -43,6 +43,8 @@ void dataconvert(){
 	 *
 	 *
 */
+	std::cout<<"ROW = "<<fileProc->Show_p_row()<<std::endl;
+	std::cout<<"COL = "<<fileProc->Show_p_col()<<std::endl;
 }
 int multivarPredicts() {
 

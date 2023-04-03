@@ -17,28 +17,35 @@ FileProcessor::FileProcessor(const FileProcessor& orig) { }
 FileProcessor::~FileProcessor() { }
 
 
+int tokenNo;
+std::string *headerline = new std::string;
+
+
 int FileProcessor::Set_col(int colval){
 	mtx.lock();
 	p_col = colval;
 	std::cout<<"Set p_col => "<<p_col<<std::endl;
 	mtx.unlock();
-	return p_col;
 }
 int FileProcessor::Set_row(int rowval){
 	mtx.lock();
 	p_row = rowval;
 	std::cout<<"Set p_row => "<<p_row<<std::endl;
 	mtx.unlock();
+}
+int FileProcessor::Show_p_row(){
 	return p_row;
 }
-
+int FileProcessor::Show_p_col(){
+	return p_col;
+}
 // NDY  //
 int FileProcessor::Delete_column(std::string fileName, std::string outFileName, int targetCol) {
 	
+    tokenNo = 0;
     std::string line;
     std::ifstream file (fileName);
     std::string token;
-    int tokenNo = 0;
     
     int lineNo = 0;
     
@@ -122,6 +129,7 @@ int FileProcessor::Delete_row(std::string fileName, std::string outFileName, int
         	file.close();
     	}
     	else std::cout << "Unable to open file '"<<fileName<<"'"; 
+	Set_row(Show_p_row() -1 );
     	return 0;
 }
 std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine) {
@@ -154,7 +162,7 @@ std::vector<double> * FileProcessor::readMultivariate(std::string fileName, int 
     std::string line;
     std::ifstream file (fileName);
     std::string token;
-    int tokenNo = 0;
+    tokenNo = 0;
     int lineNo = 0;
     
     std::vector<double> target;
@@ -211,28 +219,28 @@ int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
     std::string line;
     std::ifstream file (fileName);
     std::string token;
-    int tokenNo = 1;
+    tokenNo = 1;
     int lineNo = 0;
-    std::string *countline = new std::string;
     std::ofstream out_file;
+    /*open choice*/
     out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
     
     if (file.is_open()) {
-	getline(file,*countline);
-	for(char count : *countline)
+	getline(file,*headerline);
+	for(char count : *headerline)
 		if(count ==',')
 			tokenNo++;
 		
 	/*Clear the contents of string*/
-	countline->clear();
-	/*Memory free for string countline*/
-	delete countline;
+	//headerline->clear();
+	/*Memory free for string headerline*/
+	//delete headerline;
             while ( getline (file,line) ) {
                 lineNo++;
 		//std::cout<<line<<std::endl;
                	try{
                     std::stringstream ss(line);
-		    std::cout<<"line no.= "<<lineNo<<std::endl<<"line = "<<line<<std::endl;
+		    //std::cout<<"line no.= "<<lineNo<<std::endl<<"line = "<<line<<std::endl;
                    if(std::getline(ss, token, '\n')){
                        // if (tokenNo == columnIndx) {
 			//std::cout<<token;
@@ -254,5 +262,6 @@ int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
     //std::cout<<"LineNo = "<<lineNo<<std::endl;
     Set_row(lineNo);
     Set_col(tokenNo);
+
     return 0;   
 }
