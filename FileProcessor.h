@@ -89,12 +89,12 @@ public:
 	 *targetRow = The number of Row that want to delete.
 	 *Jack_Xul
 	 * */
-    int Set_row(int rowval);
+    void Set_row(int rowval);
 	/*
 	 *Set private row value
 	 *Jack_Xul
 	 * */
-    int Set_col(int colval);
+    void Set_col(int colval);
 	/*
 	 *Set private column value
 	 *Jack_Xul

@@ -33,7 +33,7 @@ void dataconvert(){
 //Multi Dataset File from Csv to Txt
 	fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
 	
-	fileProc->Delete_row("datasets/output.txt","datasets/ADF.txt",8000);
+	fileProc->Delete_row("datasets/output.txt","datasets/ADF.txt",0);//Default off
 	/* Test function
 	 * fileProc->Set_row(1233);
 	 * fileProc->Set_col(4566);
