@@ -42,9 +42,14 @@ void dataconvert(){
 	 *
 	 *
 	 *
-*/
+	
 	std::cout<<"ROW = "<<fileProc->Show_p_row()<<std::endl;
 	std::cout<<"COL = "<<fileProc->Show_p_col()<<std::endl;
+	*/
+	
+
+	fileProc->Split_txt("datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.1,0.8,0.1);
+
 }
 int multivarPredicts() {
 

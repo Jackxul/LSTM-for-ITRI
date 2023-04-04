@@ -87,7 +87,7 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
     	return 0;   
 }
 
-// NDY //
+// NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
 int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
 	if((trainv + testv + valv)!= 1.0){
@@ -106,13 +106,67 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
 
     	std::ifstream file (fileName);
 
-
-	out_file.open(trainFileName,std::ofstream::out | std::ofstream::trunc);
-	out_file.open(testFileName,std::ofstream::out | std::ofstream::trunc);
-	out_file.open(valFileName,std::ofstream::out | std::ofstream::trunc);
+    	std::ofstream test_file;
+    	std::ofstream val_file;
+    	std::ofstream train_file;
 	
-	
+    	if (file.is_open()) {
+		//Test
+		test_file.open(testFileName,std::ofstream::out | std::ofstream::trunc);			
+		
+		if(!test_file.is_open()){
+			std::cout<<"Unable to open Test.txt !"<<std::endl;
+			return 1;
+		}
+		while(lineNo < testNo && getline(file,line)){
+			lineNo++;
+			//std::cout<<line<<std::endl;
+			//std::cout<<"testNo = "<<lineNo<<std::endl;
 
+			test_file<<line<<"\n";
+		}
+		std::cout<<"testEnd"<<std::endl;
+		test_file.close();
+
+		//Val
+		val_file.open(valFileName,std::ofstream::out | std::ofstream::trunc);
+		
+		if(!val_file.is_open()){
+			std::cout<<"Unable to open Val.txt !"<<std::endl;
+			return 1;
+		}
+		while(lineNo < valNo && getline(file,line)){
+			lineNo++;
+			//std::cout<<line<<std::endl;
+			//std::cout<<"valNo = "<<lineNo<<std::endl;
+			
+			val_file<<line<<"\n";
+		}
+		std::cout<<"valEnd"<<std::endl;
+		val_file.close();
+
+		//Train
+		train_file.open(trainFileName,std::ofstream::out | std::ofstream::trunc);
+		
+		if(!train_file.is_open()){
+			std::cout<<"Unable to open Train.txt !"<<std::endl;
+			return 1;
+		}
+		while(lineNo < trainNo && getline(file,line)){
+			lineNo++;
+			//std::cout<<line<<std::endl;
+			//std::cout<<"trainNo = "<<lineNo<<std::endl;
+			
+			train_file<<line<<"\n";
+
+		}
+		
+		std::cout<<"trainEnd"<<std::endl;
+		train_file.close();
+
+        	file.close();
+    	}
+    	else std::cout << "Unable to open file '"<<fileName<<"'"; 
 	return 0;
 }
 
