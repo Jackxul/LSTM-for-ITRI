@@ -17,10 +17,11 @@ FileProcessor::FileProcessor(const FileProcessor& orig) { }
 FileProcessor::~FileProcessor() { }
 
 
+int lineNo;
 int tokenNo;
 std::string *headerline = new std::string;
 
-
+//Fin
 void FileProcessor::Set_col(int colval){
 	mtx.lock();
 	p_col = colval;
@@ -47,7 +48,7 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
    	std::ifstream file (fileName);
     	std::string token;
     
-    	int lineNo = 0;
+    	lineNo = 0;
     
     	std::ofstream out_file;
     	out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
@@ -88,8 +89,30 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 
 // NDY //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
-int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName){
+int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
+	if((trainv + testv + valv)!= 1.0){
+		std::cout<<"Split Proportion Error"<<std::endl;
+		return 0;
+	}
+	/*
+	 * testNo
+	 * valNo
+	 * trainNo
+	 * */
+	int trainNo = Show_p_row();
+	int testNo = (Show_p_row() * testv);
+	int valNo = (Show_p_row() * (testv + valv));
+	std::string line;
+
+    	std::ifstream file (fileName);
+
+
+	out_file.open(trainFileName,std::ofstream::out | std::ofstream::trunc);
+	out_file.open(testFileName,std::ofstream::out | std::ofstream::trunc);
+	out_file.open(valFileName,std::ofstream::out | std::ofstream::trunc);
 	
+	
+
 	return 0;
 }
 
@@ -98,9 +121,11 @@ int FileProcessor::Delete_row(std::string fileName, std::string outFileName, int
 	std::string line;
     	std::ifstream file (fileName);
     	std::string token;
-    	int lineNo = 0;
-   	 
-	if(targetRow <= 0 || targetRow > Show_p_row()){
+    	lineNo = 0;
+   	if(targetRow == 0){
+		return 0;
+	}
+	else if(targetRow < 0 || targetRow > Show_p_row()){
 		std::cout<<"Error in row range"<<std::endl;
 		return 0;
 	}
@@ -131,12 +156,16 @@ int FileProcessor::Delete_row(std::string fileName, std::string outFileName, int
 	Set_row(Show_p_row() -1 );
     	return 0;
 }
+
+
+///////////////////////////////////////////////F   i   n////////////////////////////////////////////////////
+
 std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine) {
     
     	std::vector<double> values;
     	std::string line;
     	std::ifstream file (fileName);
-    	int lineNo = 0;
+    	lineNo = 0;
     	if (file.is_open()) {
         	if (valuesPerLine == 1)  {
             		while ( getline (file,line) ) {
@@ -162,7 +191,7 @@ std::vector<double> * FileProcessor::readMultivariate(std::string fileName, int 
     	std::ifstream file (fileName);
     	std::string token;
     	tokenNo = 0;
-    	int lineNo = 0;
+    	lineNo = 0;
     
     	std::vector<double> target;
     
@@ -211,15 +240,15 @@ int FileProcessor::append(std::string line) {
     	out_file<<"";
     	return 0;
 }
-
-int FileProcessor::Csv_to_Txt(std::string fileName, std::string outFileName) {
+//Fin
+int FileProcessor::Csv_to_Txt(std::string fileName,std::string outFileName) {
    
 	/*declaration*/
     	std::string line;
     	std::ifstream file (fileName);
     	std::string token;
     	tokenNo = 1;
-    	int lineNo = 0;
+    	lineNo = 0;
     	std::ofstream out_file;
     	/*open choice*/
     	out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);

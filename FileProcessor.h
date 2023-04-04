@@ -60,12 +60,13 @@ public:
      * @param columnIndx: variable written to the output file
      * @return 0
      */
-    int Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName);
+    int Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName, float trainv , float testv , float valv );
     /*
      *trainFileName = Training File
      *testFileName = Datatest File
      *valFileName = Datatest Fil
-     *Split the text file after convert into three part
+     *Split the text file after convert into three part(trainv , testv , valv )
+     *trainv + testv + valv = 1
      *Jack_Xul
      * */
     int Csv_to_Txt(std::string fileName, std::string outFileName);
