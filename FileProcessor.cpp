@@ -42,52 +42,8 @@ int FileProcessor::Show_p_col(){
 }
 // NDY  //
 int FileProcessor::Delete_column(std::string fileName, std::string outFileName, int targetCol) {
-	
-	tokenNo = 0;
-    	std::string line;
-   	std::ifstream file (fileName);
-    	std::string token;
-    
-    	lineNo = 0;
-   	//delete single column from file
-
-
-
-    	std::ofstream out_file;
-    	out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
-    
-    	if (file.is_open()) {
-            	while ( getline (file,line) ) {
-               		try{
-                    		std::stringstream ss(line);
-                    		if(std::getline(ss, token, '\n')){
-                       			if((targetCol < 0) || (tokenNo < targetCol)){
-						std::cout<<"tokenNo = "<<tokenNo<<std::endl;
-						std::cout<<"Error in target column"<<std::endl;
-						return 0;
-					}
-					//std::cout<<"Token reset"<<std::endl;
-					tokenNo = 0;
-					while(std::getline(ss ,token , ',')){
-						if(tokenNo == targetCol){
-							tokenNo++;
-						}
-						else{
-							out_file<<token<<",";
-							tokenNo++;
-						}
-				
-					}
-                        		out_file<<token<<"\n";
-		     		}	
-                	} catch (std::exception& e) {
-                    		std::cout<<std::endl<<"33Error in line "<<lineNo<<": "<<e.what()<<std::endl;
-                	}   
-            	}
-        	file.close();
-    	}
-    	else std::cout << "Unable to open file '"<<fileName<<"'"; 
-    	return 0;   
+    	
+	return 0;   
 }
 
 // NFM //
