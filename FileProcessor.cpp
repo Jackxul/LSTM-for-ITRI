@@ -49,7 +49,10 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
     	std::string token;
     
     	lineNo = 0;
-    
+   	//delete single column from file
+
+
+
     	std::ofstream out_file;
     	out_file.open(outFileName,std::ofstream::out | std::ofstream::trunc);
     
