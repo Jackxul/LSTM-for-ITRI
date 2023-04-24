@@ -48,7 +48,7 @@ void dataconvert(){
 	*/
 	
 
-	fileProc->Split_txt("datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.1,0.8,0.1);
+	fileProc->Split_txt("datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.3,0.6,0.1);
 
 }
 int multivarPredicts() {
@@ -72,7 +72,8 @@ int multivarPredicts() {
     int targetValCol = 7;
     
     std::vector<double> * timeSeries;
-    timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatraining.txt",lines,inputVecSize,colIndxs,targetValCol);
+    //timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatraining.txt",lines,inputVecSize,colIndxs,targetValCol);
+    timeSeries = fileProc->readMultivariate("datasets/train.txt",lines,inputVecSize,colIndxs,targetValCol);
     
     // Creating the input vector Array
     std::vector<double> * input;
@@ -97,7 +98,8 @@ int multivarPredicts() {
     int predictions = 2000; // prediction points
     lines = 2000; // lines read from the files
     
-    timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatest.txt",lines,inputVecSize,colIndxs,targetValCol);
+    //timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatest.txt",lines,inputVecSize,colIndxs,targetValCol);
+    timeSeries = fileProc->readMultivariate("datasets/test.txt",lines,inputVecSize,colIndxs,targetValCol);
     input = new std::vector<double>[1];
     double result;
     double min = 0, max = 0;
@@ -285,6 +287,6 @@ int main() {
     dataconvert();	
     std::cout<<"-----multivariate starts now-----"<<std::endl;
     // predicting multivariate series
-//    multivarPredicts();
+    multivarPredicts();
 
 }
