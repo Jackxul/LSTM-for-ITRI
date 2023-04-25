@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <unistd.h>
-
+#include <mysql/mysql.h>
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
