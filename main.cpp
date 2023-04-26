@@ -8,10 +8,65 @@
 
 #include <vector>
 #include <unistd.h>
-#include <mysql/mysql.h>
+
+#include "mysql/mysql.h"
+
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
+void add_person_data(MYSQL *conn, const char *name, const char *sex, const char *height, const char *face) {
+    	char query[200];
+    	sprintf(query, "INSERT INTO person (name, sex, height, face) VALUES ('%s', '%s', '%s', '%s')", name, sex, height, face);
+    
+    	if (mysql_query(conn, query) != 0) {
+        	fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
+    	} else {
+        	printf("Data added successfully!\n");
+    	}
+}
+int msq(){
+	MYSQL *conn = mysql_init(NULL);
+	const char *host = "localhost";
+	const char *user = "root";
+	const char *password = "Sql^JX45";
+	const char *database = "Jacktest";
+	MYSQL_RES *result;
+	MYSQL_ROW row;
+	if (conn == NULL) {
+   	     fprintf(stderr, "Error initializing MySQL connection: %s\n", mysql_error(conn));
+   	     return 1;
+   	 }
+
+   	if (mysql_real_connect(conn, host, user, password, database, 0, NULL, 0) == NULL) {
+   	     fprintf(stderr, "Error connecting to MySQL database: %s\n", mysql_error(conn));
+   	     mysql_close(conn);
+   	     return 1;
+   	}
+
+   	if (mysql_query(conn, "SELECT * FROM `person`") != 0) {
+   	     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
+   	     mysql_close(conn);
+   	     return 1;
+   	}
+
+	result = mysql_store_result(conn);
+	
+	add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
+
+	while ((row = mysql_fetch_row(result)) != NULL) {
+    		printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
+	}
+
+	printf("YAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+
+	mysql_free_result(result);
+
+    	mysql_close(conn);
+
+
+
+}
+
 
 void dataconvert(){    
     ////////// Converting the CVS ////////////////////////    
@@ -281,12 +336,13 @@ int multivarPredicts() {
 
 int main() {
 	
+	msq();
 
 
 
     dataconvert();	
     std::cout<<"-----multivariate starts now-----"<<std::endl;
     // predicting multivariate series
-    multivarPredicts();
+//    multivarPredicts();
 
 }

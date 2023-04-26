@@ -63,7 +63,8 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS}
+	echo release_make
+	${LINK.cc}  -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS} -lmysqlclient 
 
 ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}

@@ -20,6 +20,7 @@ CXX=g++
 FC=gfortran
 AS=as
 
+
 # Macros
 CND_PLATFORM=GNU-Linux
 CND_DLIB_EXT=so
@@ -63,7 +64,8 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS}
+	echo debug_make
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS} -lmysqlclient 
 
 ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -83,7 +85,8 @@ ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	echo test
+	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -lmysqlclient -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
