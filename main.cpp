@@ -29,7 +29,7 @@
 
 void add_LTable(MYSQL *conn, int index, const char *date, float handover, float delay1, float delay2, float delay3, float delay4, float total_delay) {
     char query[200];
-    sprintf(query, "INSERT INTO lstm (`index`, date, handover, delay1, delay2, delay3, delay4, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
+    sprintf(query, "INSERT INTO lstm2 (`index`, date, handover, delay1, delay2, delay3, delay4, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
 
     if (mysql_query(conn, query) != 0) {
         fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
