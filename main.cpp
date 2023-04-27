@@ -27,7 +27,7 @@
 
 
 
-void add_LTable(MYSQL *conn, int *index, const char *date, float *handover, float *delay1, float *delay2, float *delay3, float *delay4, float *total_delay) {
+void add_LTable(MYSQL *conn, int index, const char *date, float handover, float delay1, float delay2, float delay3, float delay4, float total_delay) {
     	char query[200];
     	sprintf(query, "INSERT INTO lstm (name, sex, height, face) VALUES ('%d', '%s', '%f', '%f' , '%f' , '%f' , '%f' , '%f')", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
     
