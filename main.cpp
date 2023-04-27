@@ -14,6 +14,29 @@
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
+/*
+ *index  			---> int 
+ *Date  	 		---> char[20]
+ *handover success rate  	---> float
+ *DRB dealy1			---> float
+ *DRB dealy2			---> float
+ *DRB dealy3			---> float
+ *DRB dealy4			---> float
+ *Total delay			---> float
+ * */
+
+
+
+void add_LTable(MYSQL *conn, const int *index, const char *date, const float *handover, const float *delay1, const float *delay2, const float *delay3, const float *delay4, const float *total_delay) {
+    	char query[200];
+    	sprintf(query, "INSERT INTO lstm (name, sex, height, face) VALUES ('%d', '%s', '%f', '%f' , '%f' , '%f' , '%f' , '%f')", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
+    
+    	if (mysql_query(conn, query) != 0) {
+        	fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
+    	} else {
+        	printf("Data added successfully!\n");
+    	}
+}
 void add_person_data(MYSQL *conn, const char *name, const char *sex, const char *height, const char *face) {
     	char query[200];
     	sprintf(query, "INSERT INTO person (name, sex, height, face) VALUES ('%s', '%s', '%s', '%s')", name, sex, height, face);
@@ -51,6 +74,12 @@ int msq(){
 
 	result = mysql_store_result(conn);
 	
+	add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
+	add_LTable(conn, 2, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
+	add_LTable(conn, 3, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
+
+
+
 	add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
 
 	while ((row = mysql_fetch_row(result)) != NULL) {
