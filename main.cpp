@@ -28,14 +28,14 @@
 
 
 void add_LTable(MYSQL *conn, int index, const char *date, float handover, float delay1, float delay2, float delay3, float delay4, float total_delay) {
-    	char query[200];
-    	sprintf(query, "INSERT INTO lstm (index, date, handover, delay1, delay2, delay3, delay4, total_delay) VALUES ('%d', '%s', '%f', '%f' , '%f' , '%f' , '%f' , '%f')", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
-    
-    	if (mysql_query(conn, query) != 0) {
-        	fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
-    	} else {
-        	printf("Data added successfully!\n");
-    	}
+    char query[200];
+    sprintf(query, "INSERT INTO lstm (index, date, handover, delay1, delay2, delay3, delay4, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
+
+    if (mysql_query(conn, query) != 0) {
+        fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
+    } else {
+        printf("Data added successfully!\n");
+    }
 }
 void add_person_data(MYSQL *conn, const char *name, const char *sex, const char *height, const char *face) {
     	char query[200];
@@ -66,7 +66,7 @@ int msq(){
    	     return 1;
    	}
 
-   	if (mysql_query(conn, "SELECT * FROM `person`") != 0) {
+   	if (mysql_query(conn, "SELECT * FROM `lstm`") != 0) {
    	     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
    	     mysql_close(conn);
    	     return 1;
@@ -80,7 +80,7 @@ int msq(){
 
 
 
-	add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
+	//add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
 
 	while ((row = mysql_fetch_row(result)) != NULL) {
     		printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
