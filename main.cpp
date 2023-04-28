@@ -66,7 +66,7 @@ int msq(){
    	     return 1;
    	}
 
-   	if (mysql_query(conn, "SELECT * FROM `lstm`") != 0) {
+   	if (mysql_query(conn, "SELECT * FROM `lstm2`") != 0) {
    	     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
    	     mysql_close(conn);
    	     return 1;
@@ -80,7 +80,7 @@ int msq(){
 
 
 
-	//add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
+	add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
 
 	while ((row = mysql_fetch_row(result)) != NULL) {
     		printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
