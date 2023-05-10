@@ -100,8 +100,16 @@ void dataconvert(){
 	fileProc = new FileProcessor();
 //Multi Dataset File from Csv to Txt
 	fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
+	fileProc->Csv_to_Txt("datasets/output2.csv","datasets/output2.txt");    
+	fileProc->Csv_to_Txt("datasets/output3.csv","datasets/output3.txt");    
+	fileProc->Csv_to_Txt("datasets/output4.csv","datasets/output4.txt");    
+	fileProc->Csv_to_Txt("datasets/output5.csv","datasets/output5.txt");    
 	
 	fileProc->Delete_row("datasets/output.txt","datasets/ADF.txt",0);//Default off
+	fileProc->Delete_row("datasets/output2.txt","datasets/ADF2.txt",0);//Default off
+	fileProc->Delete_row("datasets/output3.txt","datasets/ADF3.txt",0);//Default off
+	fileProc->Delete_row("datasets/output4.txt","datasets/ADF4.txt",0);//Default off
+	fileProc->Delete_row("datasets/output5.txt","datasets/ADF5.txt",0);//Default off
 	/* Test function
 	 * fileProc->Set_row(1233);
 	 * fileProc->Set_col(4566);
@@ -117,6 +125,10 @@ void dataconvert(){
 	
 
 	fileProc->Split_txt("datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.3,0.6,0.1);
+	fileProc->Split_txt("datasets/output2.txt","datasets/train2.txt","datasets/test2.txt","datasets/val2.txt",0.3,0.6,0.1);
+	fileProc->Split_txt("datasets/output3.txt","datasets/train3.txt","datasets/test3.txt","datasets/val3.txt",0.3,0.6,0.1);
+	fileProc->Split_txt("datasets/output4.txt","datasets/train4.txt","datasets/test4.txt","datasets/val4.txt",0.3,0.6,0.1);
+	fileProc->Split_txt("datasets/output5.txt","datasets/train5.txt","datasets/test5.txt","datasets/val5.txt",0.3,0.6,0.1);
 
 }
 int multivarPredicts() {
