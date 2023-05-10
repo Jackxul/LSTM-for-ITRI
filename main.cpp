@@ -59,41 +59,25 @@ int msq(){
    	     fprintf(stderr, "Error initializing MySQL connection: %s\n", mysql_error(conn));
    	     return 1;
    	 }
-
    	if (mysql_real_connect(conn, host, user, password, database, 0, NULL, 0) == NULL) {
    	     fprintf(stderr, "Error connecting to MySQL database: %s\n", mysql_error(conn));
    	     mysql_close(conn);
    	     return 1;
    	}
-
    	if (mysql_query(conn, "SELECT * FROM `lstm`") != 0) {
    	     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
    	     mysql_close(conn);
    	     return 1;
    	}
-
 	result = mysql_store_result(conn);
-	
 	add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	add_LTable(conn, 2, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	add_LTable(conn, 3, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-
-
-
-	//add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
-
 	while ((row = mysql_fetch_row(result)) != NULL) {
     		printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
 	}
-
-	printf("YAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-
 	mysql_free_result(result);
-
     	mysql_close(conn);
-
-
-
 }
 
 

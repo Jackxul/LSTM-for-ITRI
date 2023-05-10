@@ -84,7 +84,7 @@ ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d"  -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
