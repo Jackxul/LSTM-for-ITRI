@@ -59,7 +59,7 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm 
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -74,7 +74,7 @@ ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 ${OBJECTDIR}/FileProcessor.o: FileProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileProcessor.o FileProcessor.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileProcessor.o FileProcessor.cpp -lmysqlclient
 
 ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 	${MKDIR} -p ${OBJECTDIR}

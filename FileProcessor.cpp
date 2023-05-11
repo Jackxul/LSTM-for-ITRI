@@ -9,7 +9,7 @@
 #include <exception>
 #include <sstream>
 #include "FileProcessor.h"
-
+#include "mysql/mysql.h"
 FileProcessor::FileProcessor() { }
 
 FileProcessor::FileProcessor(const FileProcessor& orig) { }
