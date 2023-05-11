@@ -13,6 +13,13 @@
 #include <string>
 #include <mutex>
 
+
+void connect_db(MYSQL*& conn);
+
+void close_db(MYSQL*& conn);
+
+void create_table(MYSQL*& conn, std::string tableName);
+
 class FileProcessor {
 public:
     FileProcessor();
