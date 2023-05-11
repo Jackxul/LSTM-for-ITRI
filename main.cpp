@@ -26,6 +26,9 @@
  * */
 
 
+FileProcessor * fileProc;
+/*
+Test Code
 
 void add_LTable(MYSQL *conn, int index, const char *date, float handover, float delay1, float delay2, float delay3, float delay4, float total_delay) {
     char query[200];
@@ -47,47 +50,53 @@ void add_person_data(MYSQL *conn, const char *name, const char *sex, const char 
         	printf("Data added successfully!\n");
     	}
 }
+*/
 int msq(){
-	MYSQL *conn = mysql_init(NULL);
-	const char *host = "localhost";
-	const char *user = "root";
-	const char *password = "Sql^JX45";
-	const char *database = "Jacktest";
-	MYSQL_RES *result;
-	MYSQL_ROW row;
-	if (conn == NULL) {
-   	     fprintf(stderr, "Error initializing MySQL connection: %s\n", mysql_error(conn));
-   	     return 1;
-   	 }
-   	if (mysql_real_connect(conn, host, user, password, database, 0, NULL, 0) == NULL) {
-   	     fprintf(stderr, "Error connecting to MySQL database: %s\n", mysql_error(conn));
-   	     mysql_close(conn);
-   	     return 1;
-   	}
+	
+	return 0;
+	
+	/*	Test Code	*/
+	//MYSQL *conn = mysql_init(NULL);
+	//const char *host = "localhost";
+	//const char *user = "root";
+	//const char *password = "Sql^JX45";
+	//const char *database = "Jacktest";
+	//MYSQL_RES *result;
+	//MYSQL_ROW row;
+	//if (conn == NULL) {
+   	//     fprintf(stderr, "Error initializing MySQL connection: %s\n", mysql_error(conn));
+   	//     return 1;
+   	// }
+   	//if (mysql_real_connect(conn, host, user, password, database, 0, NULL, 0) == NULL) {
+   	//     fprintf(stderr, "Error connecting to MySQL database: %s\n", mysql_error(conn));
+   	//     mysql_close(conn);
+   	//     return 1;
+   	//}
 
-   	if (mysql_query(conn, "SELECT * FROM `lstm2`") != 0) {
-   	     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
-   	     mysql_close(conn);
-   	     return 1;
-   	}
-	result = mysql_store_result(conn);
-	add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-	add_LTable(conn, 2, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-	add_LTable(conn, 3, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
+   	//if (mysql_query(conn, "SELECT * FROM `lstm2`") != 0) {
+   	//     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
+   	//     mysql_close(conn);
+   	//     return 1;
+   	//}
+	//result = mysql_store_result(conn);
+	//add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
+	//add_LTable(conn, 2, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
+	//add_LTable(conn, 3, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 
 
 
-	add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
+	//add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
 
-	while ((row = mysql_fetch_row(result)) != NULL) {
-    		printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
-	}
-	mysql_free_result(result);
-    	mysql_close(conn);
+	//while ((row = mysql_fetch_row(result)) != NULL) {
+    	//	printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
+	//}
+	//mysql_free_result(result);
+    	//mysql_close(conn);
 }
 
 
 void dataconvert(){    
+	fileProc = new FileProcessor();
     ////////// Converting the CVS ////////////////////////    
     
         
@@ -102,8 +111,6 @@ void dataconvert(){
 //    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
 //fileProc->writeUniVariate("datasets/Test.csv","datasets/Test.txt",4,2);    
 
-	FileProcessor * fileProc;
-	fileProc = new FileProcessor();
 //Multi Dataset File from Csv to Txt
 	fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
 	fileProc->Csv_to_Txt("datasets/output2.csv","datasets/output2.txt");    
@@ -136,6 +143,15 @@ void dataconvert(){
 	fileProc->Split_txt("datasets/output4.txt","datasets/train4.txt","datasets/test4.txt","datasets/val4.txt",0.3,0.6,0.1);
 	fileProc->Split_txt("datasets/output5.txt","datasets/train5.txt","datasets/test5.txt","datasets/val5.txt",0.3,0.6,0.1);
 
+
+	MYSQL* conn;
+
+	fileProc->connect_db(conn);
+	std::cout<<"connect successfully!"<<std::endl;
+	fileProc->create_table(conn,"lstm3");
+	std::cout<<"create table successfully!"<<std::endl;
+	//add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
+	fileProc->close_db(conn);
 }
 int multivarPredicts() {
 

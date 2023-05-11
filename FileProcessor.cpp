@@ -22,7 +22,7 @@ int tokenNo;
 std::string *headerline = new std::string;
 
 //mysql function implement
-void connect_db(MYSQL*& conn){
+void FileProcessor::connect_db(MYSQL*& conn){
 	conn = mysql_init(NULL);
 	if(conn == NULL){
 		std::cout<<"Error:"<<mysql_error(conn);
@@ -35,12 +35,12 @@ void connect_db(MYSQL*& conn){
 	std::cout<<"Connect to database successfully!"<<std::endl;
 }
 
-void close_db(MYSQL*& conn){
+void FileProcessor::close_db(MYSQL*& conn){
 	mysql_close(conn);
 	std::cout<<"Close database successfully!"<<std::endl;
 }
 
-void create_table(MYSQL*& conn, std::string tableName){
+void FileProcessor::create_table(MYSQL*& conn, std::string tableName){
 	std::string sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error:"<<mysql_error(conn);
@@ -52,12 +52,18 @@ void create_table(MYSQL*& conn, std::string tableName){
 
 
 
+// NDY //
+void FileProcessor::add_data(MYSQL*& conn , std::string tableName ){
+	
 
 
 
 
 
 
+
+
+}
 
 
 
