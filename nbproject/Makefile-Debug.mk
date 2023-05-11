@@ -75,7 +75,7 @@ ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 ${OBJECTDIR}/FileProcessor.o: FileProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileProcessor.o FileProcessor.cpp
+	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileProcessor.o FileProcessor.cpp -lmysqlclient
 
 ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 	${MKDIR} -p ${OBJECTDIR}
