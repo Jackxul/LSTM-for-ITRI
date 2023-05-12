@@ -147,40 +147,51 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
 			try{
-				std::istringstream iss(line);
+				std::stringstream iss(line);
 				if(std::getline(iss, line, '\n')){
 					tokenNo = 0;
 					while(std::getline(iss ,token, ',')){
 						//std::cout<<token<<std::endl;
+						int a = 0;
 						switch(tokenNo){
 							case 0:
-								_index = std::stoi(token);
+								_index = std::stof(token);
+								std::cout<<"_index = "<<token<<",";
+								//_index = a++;	
 								break;
 							case 1:
 								strncpy(_date,token.c_str(),20);
+								std::cout<<"_date = "<<token<<",";
 								break;
 							case 2:
 								_handover = std::stof(token);
+								std::cout<<"_handover = "<<token<<",";
 								break;
 							case 3:
 								_delay1 = std::stof(token);
+								std::cout<<"_delay1 = "<<token<<",";
 								break;
 							case 4:
 								_delay2 = std::stof(token);
+								std::cout<<"_delay2 = "<<token<<",";
 								break;
 							case 5:
 								_delay3 = std::stof(token);
+								std::cout<<"_delay3 = "<<token<<",";
 								break;
 							case 6:
 								_delay4 = std::stof(token);
+								std::cout<<"_delay4 = "<<token<<",";
 								break;
 							case 7:
 								_total_delay = std::stof(token);
+								std::cout<<"_total_delay = "<<token<<std::endl;
 								break;
 							default:
 								std::cout<<"Error: tokenNo"<<std::endl;
 								break;
 						}
+						std::cout<<"T:"<<tokenNo<<std::endl;
 						tokenNo++;
 					}
 
@@ -189,16 +200,16 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 
                 	} catch (std::exception& e) {
                     		std::cout<<std::endl<<"Delete_row_Error in line "<<lineNo<<": "<<e.what()<<std::endl;
-                	}  
-			std::cout<<"Index = "<<_index<<std::endl;
-			std::cout<<"Date = "<<_date<<std::endl;
-			std::cout<<"Handover = "<<_handover<<std::endl;
-			std::cout<<"Delay1 = "<<_delay1<<std::endl;
-			std::cout<<"Delay2 = "<<_delay2<<std::endl;
-			std::cout<<"Delay3 = "<<_delay3<<std::endl;
-			std::cout<<"Delay4 = "<<_delay4<<std::endl;
-			std::cout<<"TotalDelay = "<<_total_delay<<std::endl;
-
+                	} /* 
+			std::cout<<_index<<",";
+			std::cout<<_date<<",";
+			std::cout<<_handover<<",";
+			std::cout<<_delay1<<",";
+			std::cout<<_delay2<<",";
+			std::cout<<_delay3<<",";
+			std::cout<<_delay4<<",";
+			std::cout<<_total_delay;
+			std::cout<<std::endl;*/
 			test_file<<line<<"\n";
 		}
 		std::cout<<"testEnd"<<std::endl;
