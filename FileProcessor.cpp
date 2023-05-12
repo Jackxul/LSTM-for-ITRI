@@ -8,6 +8,7 @@
 #include <vector>
 #include <exception>
 #include <sstream>
+#include <string.h>
 #include "FileProcessor.h"
 #include "mysql/mysql.h"
 FileProcessor::FileProcessor() { }
@@ -115,7 +116,8 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 	float _delay3;
 	float _delay4;
 	float _total_delay;
-	int TokenNo = 0;
+	int tokenNo = 0;
+    	std::string token;
 	/*
 	 * testNo
 	 * valNo
@@ -147,7 +149,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			try{
 				std::istringstream iss(line);
 				if(std::getline(iss, line, '\n')){
-					TokenNo = 0;
+					tokenNo = 0;
 					while(std::getline(iss ,token, ',')){
 						//std::cout<<token<<std::endl;
 						switch(tokenNo){
@@ -184,7 +186,10 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 
 
 				}
-			}
+
+                	} catch (std::exception& e) {
+                    		std::cout<<std::endl<<"Delete_row_Error in line "<<lineNo<<": "<<e.what()<<std::endl;
+                	}  
 			std::cout<<"Index = "<<_index<<std::endl;
 			std::cout<<"Date = "<<_date<<std::endl;
 			std::cout<<"Handover = "<<_handover<<std::endl;
