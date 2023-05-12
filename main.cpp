@@ -154,7 +154,9 @@ void dataconvert(){
 
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
+	
 	fileProc->create_table(conn,"lstm3");
+
 	std::cout<<"create table successfully!"<<std::endl;
 	//add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	fileProc->close_db(conn);
@@ -166,23 +168,23 @@ int multivarPredicts() {
 
     ///////////////////////// Multivariate time series data prediction ////////////////////////////////////
     
-    int memCells = 10; // number of memory cells
-    int inputVecSize = 5; // input vector size
-    int trainDataSize = 5000; // train data size
-    int timeSteps = 1; // data points used for one forward step
-    float learningRate = 0.0001;
-    int iterations = 10; // training iterations with training data
-    int lines = 5000;
-    
-    DataProcessor * dataproc;
-    dataproc = new DataProcessor();
-    FileProcessor * fileProc;
-    fileProc = new FileProcessor();
-    
-    int colIndxs[] = {0,0,1,1,1,1,1};
-    int targetValCol = 7;
-    
-    std::vector<double> * timeSeries;
+	int memCells = 10; // number of memory cells
+	int inputVecSize = 5; // input vector size
+	int trainDataSize = 5000; // train data size
+	int timeSteps = 1; // data points used for one forward step
+	float learningRate = 0.0001;
+	int iterations = 10; // training iterations with training data
+	int lines = 5000;
+	
+	DataProcessor * dataproc;
+	dataproc = new DataProcessor();
+	FileProcessor * fileProc;
+	fileProc = new FileProcessor();
+	
+	int colIndxs[] = {0,0,1,1,1,1,1};
+	int targetValCol = 7;
+	
+	std::vector<double> * timeSeries;
     //timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatraining.txt",lines,inputVecSize,colIndxs,targetValCol);
     timeSeries = fileProc->readMultivariate("datasets/train.txt",lines,inputVecSize,colIndxs,targetValCol);
     
