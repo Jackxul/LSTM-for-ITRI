@@ -143,6 +143,12 @@ void dataconvert(){
 	fileProc->Split_txt("datasets/output4.txt","datasets/train4.txt","datasets/test4.txt","datasets/val4.txt",0.3,0.6,0.1);
 	fileProc->Split_txt("datasets/output5.txt","datasets/train5.txt","datasets/test5.txt","datasets/val5.txt",0.3,0.6,0.1);
 
+	
+
+
+		/*MYSQL*/
+
+
 
 	MYSQL* conn;
 
@@ -152,6 +158,9 @@ void dataconvert(){
 	std::cout<<"create table successfully!"<<std::endl;
 	//add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	fileProc->close_db(conn);
+
+
+		/*MYSQL*/
 }
 int multivarPredicts() {
 

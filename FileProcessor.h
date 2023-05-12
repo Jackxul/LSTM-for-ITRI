@@ -69,7 +69,7 @@ class FileProcessor {
 
 	    void add_data(MYSQL*& conn, std::string tableName);
 	    
-	    int Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName, float trainv , float testv , float valv );
+	    int Split_txt(MYSQL*& conn , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName, float trainv , float testv , float valv );
 	    /*
 	     *trainFileName = Training File
 	     *testFileName = Datatest File

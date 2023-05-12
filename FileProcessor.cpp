@@ -53,16 +53,15 @@ void FileProcessor::create_table(MYSQL*& conn, std::string tableName){
 
 
 // NDY //
-void FileProcessor::add_data(MYSQL*& conn , std::string tableName ){
-	
+void FileProcessor::add_data(MYSQL*& conn , std::string tableName , int index , char *date , float handover , float delay1 , float delay2 , float delay3 , float delay4 , float total_delay){
+	char query[200];
+	sprintf(query,"INSERT INTO %s VALUES(%d,'%s',%f,%f,%f,%f,%f,%f)",tableName.c_str(),index,date,handover,delay1,delay2,delay3,delay4,total_delay);
 
-
-
-
-
-
-
-
+    if (mysql_query(conn, query) != 0) {
+        fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
+    } else {
+        printf("Data added successfully!\n");
+    }
 }
 
 
@@ -102,7 +101,7 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 
 // NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
-int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
+int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
 	if((trainv + testv + valv)!= 1.0){
 		std::cout<<"Split Proportion Error"<<std::endl;
 		return 0;
