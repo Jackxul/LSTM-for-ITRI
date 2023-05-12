@@ -155,7 +155,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 								_index = std::stoi(token);
 								break;
 							case 1:
-								strcpy(_date,token.c_str());
+								strncpy(_date,token.c_str(),20);
 								break;
 							case 2:
 								_handover = std::stof(token);
@@ -184,6 +184,15 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 
 
 				}
+			}
+			std::cout<<"Index = "<<_index<<std::endl;
+			std::cout<<"Date = "<<_date<<std::endl;
+			std::cout<<"Handover = "<<_handover<<std::endl;
+			std::cout<<"Delay1 = "<<_delay1<<std::endl;
+			std::cout<<"Delay2 = "<<_delay2<<std::endl;
+			std::cout<<"Delay3 = "<<_delay3<<std::endl;
+			std::cout<<"Delay4 = "<<_delay4<<std::endl;
+			std::cout<<"TotalDelay = "<<_total_delay<<std::endl;
 
 			test_file<<line<<"\n";
 		}
