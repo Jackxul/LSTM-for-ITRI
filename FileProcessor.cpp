@@ -106,6 +106,16 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 		std::cout<<"Split Proportion Error"<<std::endl;
 		return 0;
 	}
+
+	int _index;
+	char _date[20];
+	float _handover;
+	float _delay1;
+	float _delay2;
+	float _delay3;
+	float _delay4;
+	float _total_delay;
+	int TokenNo = 0;
 	/*
 	 * testNo
 	 * valNo
@@ -134,6 +144,46 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			lineNo++;
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
+			try{
+				std::istringstream iss(line);
+				if(std::getline(iss, line, '\n')){
+					TokenNo = 0;
+					while(std::getline(iss ,token, ',')){
+						//std::cout<<token<<std::endl;
+						switch(tokenNo){
+							case 0:
+								_index = std::stoi(token);
+								break;
+							case 1:
+								strcpy(_date,token.c_str());
+								break;
+							case 2:
+								_handover = std::stof(token);
+								break;
+							case 3:
+								_delay1 = std::stof(token);
+								break;
+							case 4:
+								_delay2 = std::stof(token);
+								break;
+							case 5:
+								_delay3 = std::stof(token);
+								break;
+							case 6:
+								_delay4 = std::stof(token);
+								break;
+							case 7:
+								_total_delay = std::stof(token);
+								break;
+							default:
+								std::cout<<"Error: tokenNo"<<std::endl;
+								break;
+						}
+						tokenNo++;
+					}
+
+
+				}
 
 			test_file<<line<<"\n";
 		}
