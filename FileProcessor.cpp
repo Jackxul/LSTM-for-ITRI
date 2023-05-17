@@ -45,7 +45,56 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
     	
 	return 0;   
 }
+//Test code
+//
+//
+//
+#if 0
+void fileprint(int *fileno){
+	char path[20];
+	char line[100];
+	char *field;
+	char *comma = ",";
+	int field_count = 0 , column_count = 0;
+	sprintf(path,".data/%d.csv",*fileno);
+	FILE *fp = fopen(path, "r");
+	if(fp != NULL){
+	//open success
+		//prtintf("File Open Success\n");
+	}else{
+	//failed
+		printf("File Open Error\n");
+	}
+	while(fgets(line , 100 , fp)){
+		if(field_count == 0){
+	
+		column_count --;
+		}
+		line[strcspn(line, "\n")] = '\0';
+			field = strtok(line,comma);
+			while(field){
+				printf("|%-12s",field);
+				field = strtok(NULL, comma);
+				column_count++;
+			}
+			printf("|\n ");
+			do{
+				printf("%-13s","------------");
+			}while(column_count--);
+			printf("\n");
+		field_count++;
 
+
+
+	}
+	
+	fclose(fp);
+}
+#endif
+//
+//
+//
+//
 // NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
 int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
@@ -287,6 +336,7 @@ int FileProcessor::Csv_to_Txt(std::string fileName,std::string outFileName) {
 					//std::cout<<token;
 					while(std::getline(ss ,token , ',')){
 						out_file<<token<<",";
+						std::cout<<token;
 					}
                         		out_file<<token<<"\n";
 		    		}		
