@@ -48,52 +48,6 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
     	
 	return 0;   
 }
-//Test code
-//
-//
-//
-#if 0
-void fileprint(int *fileno){
-	char path[20];
-	char line[100];
-	char *field;
-	char *comma = ",";
-	int field_count = 0 , column_count = 0;
-	sprintf(path,".data/%d.csv",*fileno);
-	FILE *fp = fopen(path, "r");
-	if(fp != NULL){
-	//open success
-		//prtintf("File Open Success\n");
-	}else{
-	//failed
-		printf("File Open Error\n");
-	}
-	while(fgets(line , 100 , fp)){
-		if(field_count == 0){
-	
-		column_count --;
-		}
-		line[strcspn(line, "\n")] = '\0';
-			field = strtok(line,comma);
-			while(field){
-				printf("|%-12s",field);
-				field = strtok(NULL, comma);
-				column_count++;
-			}
-			printf("|\n ");
-			do{
-				printf("%-13s","------------");
-			}while(column_count--);
-			printf("\n");
-		field_count++;
-
-
-
-	}
-	
-	fclose(fp);
-}
-#endif
 //
 //
 //
@@ -116,7 +70,7 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
 	const char *comma = ",";
 	
 	char* field = strtok(const_cast<char*>(line.c_str()), comma);	
-
+	int count = 0;
 	int trainNo = Show_p_row();
 	int testNo = (Show_p_row() * testv);
 	int valNo = (Show_p_row() * (testv + valv));
@@ -147,11 +101,11 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
     			char* field = strtok(const_cast<char*>(line.c_str()), comma);
 
     			while (field != nullptr) {
-    			    std::cout << field<<std::endl;
-    			    field = strtok(nullptr, comma);
+				
+    			 	std::cout<<count++<<" : "<< field<<std::endl;
+    			    	field = strtok(nullptr, comma);
     			}
-			std::cout<<std::endl;	
-
+			count = 0;
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
 			
@@ -182,11 +136,10 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
     			char* field = strtok(const_cast<char*>(line.c_str()), comma);
 
     			while (field != nullptr) {
-    			    std::cout << field<<std::endl;
+    			    std::cout<<count++<<" : "<< field<<std::endl;
     			    field = strtok(nullptr, comma);
     			}
-			std::cout<<std::endl;	
-
+			count = 0;
 			//val_file<<line<<"\n";
 		}
 		std::cout<<"valEnd"<<std::endl;
@@ -211,11 +164,11 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
     			char* field = strtok(const_cast<char*>(line.c_str()), comma);
 
     			while (field != nullptr) {
-    			    std::cout << field<<std::endl;
-    			    field = strtok(nullptr, comma);
+				
+    				std::cout<<count++<<" : "<< field<<std::endl;
+    				field = strtok(nullptr, comma);
     			}
-			std::cout<<std::endl;	
-
+			count = 0;
 			//train_file<<line<<"\n";
 
 		}
