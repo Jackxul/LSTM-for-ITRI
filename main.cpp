@@ -404,6 +404,6 @@ int main() {
     dataconvert();	
     std::cout<<"-----multivariate starts now-----"<<std::endl;
     // predicting multivariate series
-//    multivarPredicts();
+    //multivarPredicts();
 
 }

@@ -8,7 +8,9 @@
 #include <vector>
 #include <exception>
 #include <sstream>
-#include <string.h>
+#include <iostream>
+#include <string>
+#include <cstring>
 #include "FileProcessor.h"
 #include "mysql/mysql.h"
 FileProcessor::FileProcessor() { }
@@ -99,7 +101,10 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
     	
 	return 0;   
 }
-
+//
+//
+//
+//
 // NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
 int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
@@ -123,10 +128,16 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 	 * valNo
 	 * trainNo
 	 * */
+
+	std::string line;
+
+	const char *comma = ",";
+	
+	char* field = strtok(const_cast<char*>(line.c_str()), comma);	
+	int count = 0;
 	int trainNo = Show_p_row();
 	int testNo = (Show_p_row() * testv);
 	int valNo = (Show_p_row() * (testv + valv));
-	std::string line;
 
     	std::ifstream file (fileName);
 
@@ -144,63 +155,24 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 		}
 		while(lineNo < testNo && getline(file,line)){
 			lineNo++;
+			
+			//line[strcspn(line, "\n")] = '\0';
+			//field = strtok(line,comma);
+    			const char* comma = ",";
+    			size_t pos = line.find('\0');
+    			line[pos] = '\0';
+
+    			char* field = strtok(const_cast<char*>(line.c_str()), comma);
+
+    			while (field != nullptr) {
+				
+    			 	std::cout<<count++<<" : "<< field<<std::endl;
+    			    	field = strtok(nullptr, comma);
+    			}
+			count = 0;
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
-			try{
-				std::stringstream iss(line);
-				if(std::getline(iss, line, '\n')){
-					tokenNo = 0;
-					while(std::getline(iss ,token, ',')){
-						//std::cout<<token<<std::endl;
-						int a = 0;
-						switch(tokenNo){
-							case 0:
-								_index = std::stof(token);
-								std::cout<<"_index = "<<token<<",";
-								//_index = a++;	
-								break;
-							case 1:
-								strncpy(_date,token.c_str(),20);
-								std::cout<<"_date = "<<token<<",";
-								break;
-							case 2:
-								_handover = std::stof(token);
-								std::cout<<"_handover = "<<token<<",";
-								break;
-							case 3:
-								_delay1 = std::stof(token);
-								std::cout<<"_delay1 = "<<token<<",";
-								break;
-							case 4:
-								_delay2 = std::stof(token);
-								std::cout<<"_delay2 = "<<token<<",";
-								break;
-							case 5:
-								_delay3 = std::stof(token);
-								std::cout<<"_delay3 = "<<token<<",";
-								break;
-							case 6:
-								_delay4 = std::stof(token);
-								std::cout<<"_delay4 = "<<token<<",";
-								break;
-							case 7:
-								_total_delay = std::stof(token);
-								std::cout<<"_total_delay = "<<token<<std::endl;
-								break;
-							default:
-								std::cout<<"Error: tokenNo"<<std::endl;
-								break;
-						}
-						std::cout<<"T:"<<tokenNo<<std::endl;
-						tokenNo++;
-					}
-
-
-				}
-
-                	} catch (std::exception& e) {
-                    		std::cout<<std::endl<<"Delete_row_Error in line "<<lineNo<<": "<<e.what()<<std::endl;
-                	} /* 
+			/* 
 			std::cout<<_index<<",";
 			std::cout<<_date<<",";
 			std::cout<<_handover<<",";
@@ -211,6 +183,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			std::cout<<_total_delay;
 			std::cout<<std::endl;*/
 			test_file<<line<<"\n";
+			
 		}
 		std::cout<<"testEnd"<<std::endl;
 		test_file.close();
@@ -227,7 +200,18 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			//std::cout<<line<<std::endl;
 			//std::cout<<"valNo = "<<lineNo<<std::endl;
 			
-			val_file<<line<<"\n";
+    			const char* comma = ",";
+    			size_t pos = line.find('\0');
+    			line[pos] = '\0';
+
+    			char* field = strtok(const_cast<char*>(line.c_str()), comma);
+
+    			while (field != nullptr) {
+    			    std::cout<<count++<<" : "<< field<<std::endl;
+    			    field = strtok(nullptr, comma);
+    			}
+			count = 0;
+			//val_file<<line<<"\n";
 		}
 		std::cout<<"valEnd"<<std::endl;
 		val_file.close();
@@ -244,7 +228,19 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			//std::cout<<line<<std::endl;
 			//std::cout<<"trainNo = "<<lineNo<<std::endl;
 			
-			train_file<<line<<"\n";
+    			const char* comma = ",";
+    			size_t pos = line.find('\0');
+    			line[pos] = '\0';
+
+    			char* field = strtok(const_cast<char*>(line.c_str()), comma);
+
+    			while (field != nullptr) {
+				
+    				std::cout<<count++<<" : "<< field<<std::endl;
+    				field = strtok(nullptr, comma);
+    			}
+			count = 0;
+			//train_file<<line<<"\n";
 
 		}
 		
@@ -415,6 +411,7 @@ int FileProcessor::Csv_to_Txt(std::string fileName,std::string outFileName) {
 					//std::cout<<token;
 					while(std::getline(ss ,token , ',')){
 						out_file<<token<<",";
+						std::cout<<token;
 					}
                         		out_file<<token<<"\n";
 		    		}		
