@@ -147,10 +147,10 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
     			char* field = strtok(const_cast<char*>(line.c_str()), comma);
 
     			while (field != nullptr) {
-    			    std::cout << field << std::endl;
+    			    std::cout << field<<std::endl;
     			    field = strtok(nullptr, comma);
     			}
-
+			std::cout<<std::endl;	
 
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
@@ -175,7 +175,19 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
 			//std::cout<<line<<std::endl;
 			//std::cout<<"valNo = "<<lineNo<<std::endl;
 			
-			val_file<<line<<"\n";
+    			const char* comma = ",";
+    			size_t pos = line.find('\0');
+    			line[pos] = '\0';
+
+    			char* field = strtok(const_cast<char*>(line.c_str()), comma);
+
+    			while (field != nullptr) {
+    			    std::cout << field<<std::endl;
+    			    field = strtok(nullptr, comma);
+    			}
+			std::cout<<std::endl;	
+
+			//val_file<<line<<"\n";
 		}
 		std::cout<<"valEnd"<<std::endl;
 		val_file.close();
@@ -192,7 +204,19 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
 			//std::cout<<line<<std::endl;
 			//std::cout<<"trainNo = "<<lineNo<<std::endl;
 			
-			train_file<<line<<"\n";
+    			const char* comma = ",";
+    			size_t pos = line.find('\0');
+    			line[pos] = '\0';
+
+    			char* field = strtok(const_cast<char*>(line.c_str()), comma);
+
+    			while (field != nullptr) {
+    			    std::cout << field<<std::endl;
+    			    field = strtok(nullptr, comma);
+    			}
+			std::cout<<std::endl;	
+
+			//train_file<<line<<"\n";
 
 		}
 		
