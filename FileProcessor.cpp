@@ -8,6 +8,9 @@
 #include <vector>
 #include <exception>
 #include <sstream>
+#include <iostream>
+#include <string>
+#include <cstring>
 #include "FileProcessor.h"
 
 FileProcessor::FileProcessor() { }
@@ -107,10 +110,16 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
 	 * valNo
 	 * trainNo
 	 * */
+
+	std::string line;
+
+	const char *comma = ",";
+	
+	char* field = strtok(const_cast<char*>(line.c_str()), comma);	
+
 	int trainNo = Show_p_row();
 	int testNo = (Show_p_row() * testv);
 	int valNo = (Show_p_row() * (testv + valv));
-	std::string line;
 
     	std::ifstream file (fileName);
 
@@ -128,10 +137,18 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
 		}
 		while(lineNo < testNo && getline(file,line)){
 			lineNo++;
+			
+			line[strcspn(line, "\n")] = '\0';
+			field = strtok(line,comma);
+			
+
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
-
-			test_file<<line<<"\n";
+			
+			//print per line
+			//test_file<<line<<"\n";
+			//print per item in line
+			
 		}
 		std::cout<<"testEnd"<<std::endl;
 		test_file.close();
