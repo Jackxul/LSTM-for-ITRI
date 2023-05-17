@@ -138,9 +138,19 @@ int FileProcessor::Split_txt(std::string fileName, std::string trainFileName , s
 		while(lineNo < testNo && getline(file,line)){
 			lineNo++;
 			
-			line[strcspn(line, "\n")] = '\0';
-			field = strtok(line,comma);
-			
+			//line[strcspn(line, "\n")] = '\0';
+			//field = strtok(line,comma);
+    			const char* comma = ",";
+    			size_t pos = line.find('\0');
+    			line[pos] = '\0';
+
+    			char* field = strtok(const_cast<char*>(line.c_str()), comma);
+
+    			while (field != nullptr) {
+    			    std::cout << field << std::endl;
+    			    field = strtok(nullptr, comma);
+    			}
+
 
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
