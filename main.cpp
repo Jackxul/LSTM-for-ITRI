@@ -27,12 +27,10 @@
 
 
 FileProcessor * fileProc;
-/*
-Test Code
 
-void add_LTable(MYSQL *conn, int index, const char *date, float handover, float delay1, float delay2, float delay3, float delay4, float total_delay) {
+void Insert_table(MYSQL *conn, int index, const char *date, float handover, float delay1, float delay2, float delay3, float delay4, float total_delay) {
     char query[200];
-    sprintf(query, "INSERT INTO lstm2 (`index`, date, handover, delay1, delay2, delay3, delay4, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
+    sprintf(query, "INSERT INTO lstm ( line_id, date, handover, delay1, delay2, delay3, delay4, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
 
     if (mysql_query(conn, query) != 0) {
         fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
@@ -40,6 +38,9 @@ void add_LTable(MYSQL *conn, int index, const char *date, float handover, float 
         printf("Data added successfully!\n");
     }
 }
+/*
+Test Code
+
 void add_person_data(MYSQL *conn, const char *name, const char *sex, const char *height, const char *face) {
     	char query[200];
     	sprintf(query, "INSERT INTO person (name, sex, height, face) VALUES ('%s', '%s', '%s', '%s')", name, sex, height, face);
@@ -141,11 +142,17 @@ void dataconvert(){
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
 	
-	fileProc->create_table(conn,"lstm3");
-
+	fileProc->create_table(conn,"test_data");
+	fileProc->create_table(conn,"val_data");
+	fileProc->create_table(conn,"train_data");
+	//fileProc->add_data(conn,"lstm", 1 , "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	std::cout<<"create table successfully!"<<std::endl;
 
-
+/*	if (!fileProc->createTable(conn, "my_table")) {
+        	mysql_close(conn);
+		std::cout<<"create table failed!"<<std::endl;
+    	}
+*/
 	fileProc->Split_txt(conn ,"datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.3,0.6,0.1);
 	
 	//fileProc->Split_txt(conn ,"datasets/output2.txt","datasets/train2.txt","datasets/test2.txt","datasets/val2.txt",0.3,0.6,0.1);

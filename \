@@ -166,7 +166,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 
     			while (field != nullptr) {
 				
-    			 	//std::cout<<count++<<" : "<< field<<std::endl;
+    			 	std::cout<<count++<<" : "<< field<<std::endl;
 				if(count == 0){
 					_index = atoi(field);
 				}
@@ -191,14 +191,14 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 				else if(count == 7){
 					_total_delay = atof(field);
 				}
-				count += 1;
+
 
     			    	field = strtok(nullptr, comma);
     			}
 			count = 0;
 			//std::cout<<line<<std::endl;
 			//std::cout<<"testNo = "<<lineNo<<std::endl;
-			 
+			/* 
 			std::cout<<_index<<",";
 			std::cout<<_date<<",";
 			std::cout<<_handover<<",";
@@ -207,9 +207,8 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			std::cout<<_delay3<<",";
 			std::cout<<_delay4<<",";
 			std::cout<<_total_delay;
-			std::cout<<std::endl;
-			add_data(conn,"test_data",_index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
-			//test_file<<line<<"\n";
+			std::cout<<std::endl;*/
+			test_file<<line<<"\n";
 			
 		}
 		std::cout<<"testEnd"<<std::endl;
@@ -234,47 +233,11 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
     			char* field = strtok(const_cast<char*>(line.c_str()), comma);
 
     			while (field != nullptr) {
-    			    //std::cout<<count++<<" : "<< field<<std::endl;
-				if(count == 0){
-					_index = atoi(field);
-				}
-				else if(count == 1){
-					strncpy(_date,field,20);
-				}
-				else if(count == 2){
-					_handover = atof(field);
-				}
-				else if(count == 3){
-					_delay1 = atof(field);
-				}
-				else if(count == 4){
-					_delay2 = atof(field);
-				}
-				else if(count == 5){
-					_delay3 = atof(field);
-				}
-				else if(count == 6){
-					_delay4 = atof(field);
-				}
-				else if(count == 7){
-					_total_delay = atof(field);
-				}
-    			    	count += 1;
-				field = strtok(nullptr, comma);
+    			    std::cout<<count++<<" : "<< field<<std::endl;
+    			    field = strtok(nullptr, comma);
     			}
 			count = 0;
 			//val_file<<line<<"\n";
-			std::cout<<_index<<",";
-			std::cout<<_date<<",";
-			std::cout<<_handover<<",";
-			std::cout<<_delay1<<",";
-			std::cout<<_delay2<<",";
-			std::cout<<_delay3<<",";
-			std::cout<<_delay4<<",";
-			std::cout<<_total_delay;
-			std::cout<<std::endl;
-			add_data(conn,"val_data",_index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
-			//test_file<<line<<"\n";
 		}
 		std::cout<<"valEnd"<<std::endl;
 		val_file.close();
@@ -299,48 +262,12 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 
     			while (field != nullptr) {
 				
-    				//std::cout<<count++<<" : "<< field<<std::endl;
-				if(count == 0){
-					_index = atoi(field);
-				}
-				else if(count == 1){
-					strncpy(_date,field,20);
-				}
-				else if(count == 2){
-					_handover = atof(field);
-				}
-				else if(count == 3){
-					_delay1 = atof(field);
-				}
-				else if(count == 4){
-					_delay2 = atof(field);
-				}
-				else if(count == 5){
-					_delay3 = atof(field);
-				}
-				else if(count == 6){
-					_delay4 = atof(field);
-				}
-				else if(count == 7){
-					_total_delay = atof(field);
-				}
-    			    	count += 1;
-				field = strtok(nullptr, comma);
+    				std::cout<<count++<<" : "<< field<<std::endl;
+    				field = strtok(nullptr, comma);
     			}
 			count = 0;
 			//train_file<<line<<"\n";
 
-			std::cout<<_index<<",";
-			std::cout<<_date<<",";
-			std::cout<<_handover<<",";
-			std::cout<<_delay1<<",";
-			std::cout<<_delay2<<",";
-			std::cout<<_delay3<<",";
-			std::cout<<_delay4<<",";
-			std::cout<<_total_delay;
-			std::cout<<std::endl;
-			add_data(conn,"train_data",_index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
-			//test_file<<line<<"\n";
 		}
 		
 		std::cout<<"trainEnd"<<std::endl;
