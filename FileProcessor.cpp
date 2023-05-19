@@ -58,7 +58,7 @@ void FileProcessor::create_table(MYSQL*& conn, std::string tableName){
 // NDY //
 void FileProcessor::add_data(MYSQL*& conn , std::string tableName , int db_id , int line_id , char *date , float handover , float delay1 , float delay2 , float delay3 , float delay4 , float total_delay){
 	char query[200];
-	sprintf(query,"INSERT INTO %s VALUES(%d,'%s',%f,%f,%f,%f,%f,%f)",tableName.c_str(),db_id,line_id,date,handover,delay1,delay2,delay3,delay4,total_delay);
+	sprintf(query,"INSERT INTO %s VALUES(%d,%d,'%s',%f,%f,%f,%f,%f,%f)",tableName.c_str(),db_id,line_id,date,handover,delay1,delay2,delay3,delay4,total_delay);
 
     if (mysql_query(conn, query) != 0) {
         fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
