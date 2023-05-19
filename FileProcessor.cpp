@@ -31,7 +31,7 @@ void FileProcessor::connect_db(MYSQL*& conn){
 		std::cout<<"Error:"<<mysql_error(conn);
 		exit(1);
 	}
-	if(mysql_real_connect(conn,"localhost","root","Sql^JX45","Jacktest",0,NULL,0) == NULL){
+	if(mysql_real_connect(conn,"localhost","root","Sql^JX45","gNb",0,NULL,0) == NULL){
 		std::cout<<"Error:"<<mysql_error(conn);
 		exit(1);
 	}
@@ -44,7 +44,7 @@ void FileProcessor::close_db(MYSQL*& conn){
 }
 
 void FileProcessor::create_table(MYSQL*& conn, std::string tableName){
-	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, dleay1 FLOAT , delay2 FLOAT , delay3 FLOAT , delay4 FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	std::string sql = "CREATE TABLE " + tableName + " ( id INT , line_no INT , date VARCHAR(255) , handover FLOAT, dleay1 FLOAT , delay2 FLOAT , delay3 FLOAT , delay4 FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error:"<<mysql_error(conn);
 		exit(1);
@@ -56,9 +56,9 @@ void FileProcessor::create_table(MYSQL*& conn, std::string tableName){
 
 
 // NDY //
-void FileProcessor::add_data(MYSQL*& conn , std::string tableName , int line_id , char *date , float handover , float delay1 , float delay2 , float delay3 , float delay4 , float total_delay){
+void FileProcessor::add_data(MYSQL*& conn , std::string tableName , int db_id , int line_id , char *date , float handover , float delay1 , float delay2 , float delay3 , float delay4 , float total_delay){
 	char query[200];
-	sprintf(query,"INSERT INTO %s VALUES(%d,'%s',%f,%f,%f,%f,%f,%f)",tableName.c_str(),line_id,date,handover,delay1,delay2,delay3,delay4,total_delay);
+	sprintf(query,"INSERT INTO %s VALUES(%d,'%s',%f,%f,%f,%f,%f,%f)",tableName.c_str(),db_id,line_id,date,handover,delay1,delay2,delay3,delay4,total_delay);
 
     if (mysql_query(conn, query) != 0) {
         fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
@@ -107,12 +107,13 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 //
 // NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
-int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
+int FileProcessor::Split_txt(MYSQL*& conn , int db_id , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
 	if((trainv + testv + valv)!= 1.0){
 		std::cout<<"Split Proportion Error"<<std::endl;
 		return 0;
 	}
 
+	int _db_index = db_id;
 	int _index;
 	char _date[20];
 	float _handover;
@@ -208,7 +209,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			std::cout<<_delay4<<",";
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
-			add_data(conn,"test_data",_index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
+			add_data(conn,"test_data", _db_index ,_index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
 			//test_file<<line<<"\n";
 			
 		}
@@ -273,7 +274,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			std::cout<<_delay4<<",";
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
-			add_data(conn,"val_data",_index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
+			add_data(conn,"val_data", _db_index , _index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
 			//test_file<<line<<"\n";
 		}
 		std::cout<<"valEnd"<<std::endl;
@@ -339,7 +340,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , std::string fileName, std::string tr
 			std::cout<<_delay4<<",";
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
-			add_data(conn,"train_data",_index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
+			add_data(conn,"train_data",db_id, _index,_date,_handover,_delay1,_delay2,_delay3,_delay4,_total_delay);
 			//test_file<<line<<"\n";
 		}
 		
