@@ -44,7 +44,7 @@ void FileProcessor::close_db(MYSQL*& conn){
 }
 
 void FileProcessor::create_table(MYSQL*& conn, std::string tableName){
-	std::string sql = "CREATE TABLE " + tableName + " ( id INT , line_no INT , date VARCHAR(255) , handover FLOAT, dleay1 FLOAT , delay2 FLOAT , delay3 FLOAT , delay4 FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	std::string sql = "CREATE TABLE " + tableName + " ( id INT , line_no INT , date VARCHAR(255) , handover FLOAT, dleay1 FLOAT , delay2 FLOAT , delay3 FLOAT , delay4 FLOAT , total_delay FLOAT )";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error:"<<mysql_error(conn);
 		exit(1);
