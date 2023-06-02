@@ -20,7 +20,7 @@ FileProcessor::FileProcessor(const FileProcessor& orig) { }
 FileProcessor::~FileProcessor() { }
 
 
-int lineNo;
+int lineNo = 0;
 int tokenNo;
 std::string *headerline = new std::string;
 
@@ -153,7 +153,6 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
     	std::ofstream val_file;
     	std::ofstream train_file;
 	
-	std::cout<<"This is test code of enter Split function"<<std::endl;
     	if (file.is_open()) {
 		//Test
 		test_file.open(testFileName,std::ofstream::out | std::ofstream::trunc);			
@@ -162,8 +161,11 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 			std::cout<<"Unable to open Test.txt !"<<std::endl;
 			return 1;
 		}
+		std::cout<<"This is test code of enter Split function"<<std::endl;
+		
 		while(lineNo < testNo && getline(file,line)){
 			lineNo++;
+			std::cout<<"This is test code of enter Split while function"<<std::endl;
 			
 			//line[strcspn(line, "\n")] = '\0';
 			//field = strtok(line,comma);
@@ -358,6 +360,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
         	file.close();
     	}
     	else std::cout << "Unable to open file '"<<fileName<<"'"; 
+	lineNo = 0;
 	return 0;
 }
 
