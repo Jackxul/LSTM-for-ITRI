@@ -159,6 +159,7 @@ void dataconvert(){
 	fileProc->create_table(conn,"val_data5");
 	//fileProc->add_data(conn,"lstm", 1 , "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	std::cout<<"create table successfully!"<<std::endl;
+>>>>>>> main
 
 /*	if (!fileProc->createTable(conn, "my_table")) {
         	mysql_close(conn);

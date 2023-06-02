@@ -31,7 +31,7 @@ void FileProcessor::connect_db(MYSQL*& conn){
 		std::cout<<"Error:"<<mysql_error(conn);
 		exit(1);
 	}
-	if(mysql_real_connect(conn,"localhost","root","Sql^JX45","Jacktest",0,NULL,0) == NULL){
+	if(mysql_real_connect(conn,"localhost","root","Sql^JX45","gNb",0,NULL,0) == NULL){
 		std::cout<<"Error:"<<mysql_error(conn);
 		exit(1);
 	}
@@ -113,6 +113,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 		return 0;
 	}
 
+	int _db_index = db_id;
 	int _index;
 	char _date[20];
 	float _handover;
