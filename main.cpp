@@ -157,15 +157,8 @@ void dataconvert(){
 	fileProc->create_table(conn,"train_data5");
 	fileProc->create_table(conn,"test_data5");
 	fileProc->create_table(conn,"val_data5");
-	//fileProc->add_data(conn,"lstm", 1 , "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	std::cout<<"create table successfully!"<<std::endl;
->>>>>>> main
 
-/*	if (!fileProc->createTable(conn, "my_table")) {
-        	mysql_close(conn);
-		std::cout<<"create table failed!"<<std::endl;
-    	}
-*/
 	fileProc->Split_txt(conn , 1 , "datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.3,0.6,0.1);
 	fileProc->Split_txt(conn , 2 , "datasets/output2.txt","datasets/train2.txt","datasets/test2.txt","datasets/val2.txt",0.3,0.6,0.1);
 	fileProc->Split_txt(conn , 3 , "datasets/output3.txt","datasets/train3.txt","datasets/test3.txt","datasets/val3.txt",0.3,0.6,0.1);
