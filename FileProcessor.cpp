@@ -113,7 +113,6 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 		return 0;
 	}
 
-	int _db_index = db_id;
 	int _index;
 	char _date[20];
 	float _handover;
@@ -154,6 +153,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
     	std::ofstream val_file;
     	std::ofstream train_file;
 	
+	std::cout<<"This is test code of enter Split function"<<std::endl;
     	if (file.is_open()) {
 		//Test
 		test_file.open(testFileName,std::ofstream::out | std::ofstream::trunc);			
