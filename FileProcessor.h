@@ -68,9 +68,9 @@ class FileProcessor {
 	    void create_table(MYSQL*& conn, std::string tableName);
 
 	    
-	    void add_data(MYSQL*& conn , std::string tableName , int index , char *date , float handover , float delay1 , float delay2 , float delay3 , float delay4 , float total_delay);
+	    void add_data(MYSQL*& conn , std::string tableName , int line_id , char *date , float handover , float DRB_RlcDelayUL , float DRB_AirlfDelayUL , float DRB_RlcSduDelayDL , float DRB_AirlfDelayDL , float total_delay);
 	    
-	    int Split_txt(MYSQL*& conn , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName, float trainv , float testv , float valv );
+	    int Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv );
 	    /*
 	     *trainFileName = Training File
 	     *testFileName = Datatest File

@@ -18,19 +18,19 @@
  *index  			---> int 
  *Date  	 		---> char[20]
  *handover success rate  	---> float
- *DRB dealy1			---> float
- *DRB dealy2			---> float
- *DRB dealy3			---> float
- *DRB dealy4			---> float
+ *DRB DRB_RlcDelayUL			---> float
+ *DRB DRB_AirlfDelayUL			---> float
+ *DRB DRB_RlcSduDelayDL			---> float
+ *DRB DRB_AirlfDelayDL			---> float
  *Total delay			---> float
  * */
 
 
 FileProcessor * fileProc;
 
-void Insert_table(MYSQL *conn, int index, const char *date, float handover, float delay1, float delay2, float delay3, float delay4, float total_delay) {
+void Insert_table(MYSQL *conn, int index, const char *date, float handover, float DRB_RlcDelayUL, float DRB_AirlfDelayUL, float DRB_RlcSduDelayDL, float DRB_AirlfDelayDL, float total_delay) {
     char query[200];
-    sprintf(query, "INSERT INTO lstm ( line_id, date, handover, delay1, delay2, delay3, delay4, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, delay1, delay2, delay3, delay4, total_delay);
+    sprintf(query, "INSERT INTO lstm ( line_id, date, handover, DRB_RlcDelayUL, DRB_AirlfDelayUL, DRB_RlcSduDelayDL, DRB_AirlfDelayDL, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, DRB_RlcDelayUL, DRB_AirlfDelayUL , DRB_RlcSduDelayDL, DRB_AirlfDelayDL, total_delay);
 
     if (mysql_query(conn, query) != 0) {
         fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
@@ -45,7 +45,7 @@ void add_person_data(MYSQL *conn, const char *name, const char *sex, const char 
     	char query[200];
     	sprintf(query, "INSERT INTO person (name, sex, height, face) VALUES ('%s', '%s', '%s', '%s')", name, sex, height, face);
     
-    	if (mysql_query(conn, query) != 0) {
+    	if (mysql_query(conn, query) != 0) {a
         	fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
     	} else {
         	printf("Data added successfully!\n");
@@ -142,9 +142,21 @@ void dataconvert(){
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
 	
-	fileProc->create_table(conn,"test_data");
-	fileProc->create_table(conn,"val_data");
-	fileProc->create_table(conn,"train_data");
+	fileProc->create_table(conn,"test_data1");
+	fileProc->create_table(conn,"train_data1");
+	fileProc->create_table(conn,"val_data1");
+	fileProc->create_table(conn,"train_data2");
+	fileProc->create_table(conn,"test_data2");
+	fileProc->create_table(conn,"val_data2");
+	fileProc->create_table(conn,"train_data3");
+	fileProc->create_table(conn,"test_data3");
+	fileProc->create_table(conn,"val_data3");
+	fileProc->create_table(conn,"train_data4");
+	fileProc->create_table(conn,"test_data4");
+	fileProc->create_table(conn,"val_data4");
+	fileProc->create_table(conn,"train_data5");
+	fileProc->create_table(conn,"test_data5");
+	fileProc->create_table(conn,"val_data5");
 	//fileProc->add_data(conn,"lstm", 1 , "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	std::cout<<"create table successfully!"<<std::endl;
 
@@ -153,12 +165,12 @@ void dataconvert(){
 		std::cout<<"create table failed!"<<std::endl;
     	}
 */
-	fileProc->Split_txt(conn ,"datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.3,0.6,0.1);
+	fileProc->Split_txt(conn , 1 , "datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.3,0.6,0.1);
+	fileProc->Split_txt(conn , 2 , "datasets/output2.txt","datasets/train2.txt","datasets/test2.txt","datasets/val2.txt",0.3,0.6,0.1);
+	fileProc->Split_txt(conn , 3 , "datasets/output3.txt","datasets/train3.txt","datasets/test3.txt","datasets/val3.txt",0.3,0.6,0.1);
+	fileProc->Split_txt(conn , 4 , "datasets/output4.txt","datasets/train4.txt","datasets/test4.txt","datasets/val4.txt",0.3,0.6,0.1);
+	fileProc->Split_txt(conn , 5 , "datasets/output5.txt","datasets/train5.txt","datasets/test5.txt","datasets/val5.txt",0.3,0.6,0.1);
 	
-	//fileProc->Split_txt(conn ,"datasets/output2.txt","datasets/train2.txt","datasets/test2.txt","datasets/val2.txt",0.3,0.6,0.1);
-	//fileProc->Split_txt(conn ,"datasets/output3.txt","datasets/train3.txt","datasets/test3.txt","datasets/val3.txt",0.3,0.6,0.1);
-	//fileProc->Split_txt(conn ,"datasets/output4.txt","datasets/train4.txt","datasets/test4.txt","datasets/val4.txt",0.3,0.6,0.1);
-	//fileProc->Split_txt(conn ,"datasets/output5.txt","datasets/train5.txt","datasets/test5.txt","datasets/val5.txt",0.3,0.6,0.1);
 
 
 		
