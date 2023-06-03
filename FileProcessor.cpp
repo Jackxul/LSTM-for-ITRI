@@ -107,7 +107,7 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 //
 // NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
-int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, std::string trainFileName , std::string testFileName , std::string valFileName , float trainv , float testv , float valv ){
+int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , float trainv , float testv , float valv ){
 	if((trainv + testv + valv)!= 1.0){
 		std::cout<<"Split Proportion Error"<<std::endl;
 		return 0;
@@ -149,19 +149,11 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 
     	std::ifstream file (fileName);
 
-    	std::ofstream test_file;
-    	std::ofstream val_file;
-    	std::ofstream train_file;
 	
 	std::cout<<"This is test code of enter Split function"<<std::endl;
     	if (file.is_open()) {
 		//Test
-		test_file.open(testFileName,std::ofstream::out | std::ofstream::trunc);			
 		
-		if(!test_file.is_open()){
-			std::cout<<"Unable to open Test.txt !"<<std::endl;
-			return 1;
-		}
 		std::cout<<"This is test code of enter Split function"<<std::endl;
 		
 		while(lineNo < testNo && getline(file,line)){
@@ -221,19 +213,12 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
 			add_data(conn,test,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
-			//test_file<<line<<"\n";
 			
 		}
-		std::cout<<"testEnd"<<std::endl;
-		test_file.close();
+		//std::cout<<"testEnd"<<std::endl;
 
 		//Val
-		val_file.open(valFileName,std::ofstream::out | std::ofstream::trunc);
 		
-		if(!val_file.is_open()){
-			std::cout<<"Unable to open Val.txt !"<<std::endl;
-			return 1;
-		}
 		while(lineNo < valNo && getline(file,line)){
 			lineNo++;
 			//std::cout<<line<<std::endl;
@@ -275,7 +260,6 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 				field = strtok(nullptr, comma);
     			}
 			count = 0;
-			//val_file<<line<<"\n";
 			std::cout<<_index<<",";
 			std::cout<<_date<<",";
 			std::cout<<_handover<<",";
@@ -286,18 +270,11 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
 			add_data(conn,val,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
-			//test_file<<line<<"\n";
 		}
-		std::cout<<"valEnd"<<std::endl;
-		val_file.close();
+		//std::cout<<"valEnd"<<std::endl;
 
 		//Train
-		train_file.open(trainFileName,std::ofstream::out | std::ofstream::trunc);
 		
-		if(!train_file.is_open()){
-			std::cout<<"Unable to open Train.txt !"<<std::endl;
-			return 1;
-		}
 		while(lineNo < trainNo && getline(file,line)){
 			lineNo++;
 			//std::cout<<line<<std::endl;
@@ -340,7 +317,6 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 				field = strtok(nullptr, comma);
     			}
 			count = 0;
-			//train_file<<line<<"\n";
 
 			std::cout<<_index<<",";
 			std::cout<<_date<<",";
@@ -352,11 +328,9 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName, st
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
 			add_data(conn,train,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
-			//test_file<<line<<"\n";
 		}
 		
-		std::cout<<"trainEnd"<<std::endl;
-		train_file.close();
+		//std::cout<<"trainEnd"<<std::endl;
 
         	file.close();
     	}

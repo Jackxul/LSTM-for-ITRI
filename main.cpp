@@ -159,11 +159,12 @@ void dataconvert(){
 	fileProc->create_table(conn,"val_data5");
 	std::cout<<"create table successfully!"<<std::endl;
 
-	fileProc->Split_txt(conn , 1 , "datasets/output.txt","datasets/train.txt","datasets/test.txt","datasets/val.txt",0.3,0.6,0.1);
-	fileProc->Split_txt(conn , 2 , "datasets/output2.txt","datasets/train2.txt","datasets/test2.txt","datasets/val2.txt",0.3,0.6,0.1);
-	fileProc->Split_txt(conn , 3 , "datasets/output3.txt","datasets/train3.txt","datasets/test3.txt","datasets/val3.txt",0.3,0.6,0.1);
-	fileProc->Split_txt(conn , 4 , "datasets/output4.txt","datasets/train4.txt","datasets/test4.txt","datasets/val4.txt",0.3,0.6,0.1);
-	fileProc->Split_txt(conn , 5 , "datasets/output5.txt","datasets/train5.txt","datasets/test5.txt","datasets/val5.txt",0.3,0.6,0.1);
+	//(val : test : train)
+	fileProc->Split_txt(conn , 1 , "datasets/output.txt",0.1,0.4,0.5);
+	fileProc->Split_txt(conn , 2 , "datasets/output2.txt",0.2,0.6,0.2);
+	fileProc->Split_txt(conn , 3 , "datasets/output3.txt",0.3,0.6,0.1);
+	fileProc->Split_txt(conn , 4 , "datasets/output4.txt",0.3,0.4,0.3);
+	fileProc->Split_txt(conn , 5 , "datasets/output5.txt",0.2,0.5,0.3);
 	
 
 
