@@ -65,8 +65,9 @@ class FileProcessor {
 	
 	    void close_db(MYSQL*& conn);
 	
-	    void create_table(MYSQL*& conn, std::string tableName);
-
+	    void create_table(MYSQL*& conn, int tableNo);
+	    
+	    void clean_table(MYSQL*& conn, int startNo , int endNo);
 	    
 	    void add_data(MYSQL*& conn , std::string tableName , int line_id , char *date , float handover , float DRB_RlcDelayUL , float DRB_AirlfDelayUL , float DRB_RlcSduDelayDL , float DRB_AirlfDelayDL , float total_delay);
 	    

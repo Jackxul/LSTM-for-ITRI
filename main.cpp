@@ -142,21 +142,11 @@ void dataconvert(){
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
 	
-	fileProc->create_table(conn,"test_data1");
-	fileProc->create_table(conn,"train_data1");
-	fileProc->create_table(conn,"val_data1");
-	fileProc->create_table(conn,"train_data2");
-	fileProc->create_table(conn,"test_data2");
-	fileProc->create_table(conn,"val_data2");
-	fileProc->create_table(conn,"train_data3");
-	fileProc->create_table(conn,"test_data3");
-	fileProc->create_table(conn,"val_data3");
-	fileProc->create_table(conn,"train_data4");
-	fileProc->create_table(conn,"test_data4");
-	fileProc->create_table(conn,"val_data4");
-	fileProc->create_table(conn,"train_data5");
-	fileProc->create_table(conn,"test_data5");
-	fileProc->create_table(conn,"val_data5");
+	fileProc->create_table(conn,1);
+	fileProc->create_table(conn,2);
+	fileProc->create_table(conn,3);
+	fileProc->create_table(conn,4);
+	fileProc->create_table(conn,5);
 	std::cout<<"create table successfully!"<<std::endl;
 
 	//(val : test : train)

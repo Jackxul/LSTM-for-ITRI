@@ -43,16 +43,58 @@ void FileProcessor::close_db(MYSQL*& conn){
 	std::cout<<"Close database successfully!"<<std::endl;
 }
 
-void FileProcessor::create_table(MYSQL*& conn, std::string tableName){
+void FileProcessor::create_table(MYSQL*& conn, int tableNo){
+	std::string tableName = "test_data";
+	tableName = tableName + std::to_string(tableNo);
 	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
-		std::cout<<"Error:"<<mysql_error(conn);
+		std::cout<<"Error test_data creation"<<mysql_error(conn);
 		exit(1);
 	}
+
+	std::string tableName = "train_data";
+	tableName = tableName + std::to_string(tableNo);
+	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	if(mysql_query(conn,sql.c_str())){
+		std::cout<<"Error train_data creation"<<mysql_error(conn);
+		exit(1);
+	}
+	std::string tableName = "val_data";
+	tableName = tableName + std::to_string(tableNo);
+	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	if(mysql_query(conn,sql.c_str())){
+		std::cout<<"Error val_data creation"<<mysql_error(conn);
+		exit(1);
+	}
+
+
+
+
+
+
 	std::cout<<"Create table successfully!"<<std::endl;
 }
 
 
+void FileProcessor::clean_table(MYSQL*& conn, int startNo , int endNo){
+	while(startNo <= endNo){
+		std::string test = "test_data";
+		std::string train = "train_data";
+		std::string val = "val_data";
+		test = test + std::to_string(startNo);
+		train = train + std::to_string(startNo);
+		val = val + std::to_string(startNo);
+
+		std::string sql = "DROP TABLE IF EXISTS " + test + "," + train + "," + val;
+		startNo++;
+		if(mysql_query(conn,sql.c_str())){
+			std::cout<<"Error:"<<mysql_error(conn);
+			exit(1);
+		}
+
+	}
+	std::cout<<"Clean table successfully!"<<std::endl;
+}
 
 
 // NDY //
