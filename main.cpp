@@ -14,6 +14,11 @@
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
+
+#define Mode false // true: create table, false: clean table
+
+
+
 /*
  *index  			---> int 
  *Date  	 		---> char[20]
@@ -22,6 +27,7 @@
  *DRB DRB_AirlfDelayUL			---> float
  *DRB DRB_RlcSduDelayDL			---> float
  *DRB DRB_AirlfDelayDL			---> float
+
  *Total delay			---> float
  * */
 
@@ -142,22 +148,20 @@ void dataconvert(){
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
 	
-	fileProc->create_table(conn,1);
-	fileProc->create_table(conn,2);
-	fileProc->create_table(conn,3);
-	fileProc->create_table(conn,4);
-	fileProc->create_table(conn,5);
-	std::cout<<"create table successfully!"<<std::endl;
+	fileProc->create_table(conn,1 , Mode);
+	fileProc->create_table(conn,2 , Mode);
+	fileProc->create_table(conn,3 , Mode);
+	fileProc->create_table(conn,4 , Mode);
+	fileProc->create_table(conn,5 , Mode);
 
 	//(val : test : train)
-	fileProc->Split_txt(conn , 1 , "datasets/output.txt",0.1,0.4,0.5);
-	fileProc->Split_txt(conn , 2 , "datasets/output2.txt",0.2,0.6,0.2);
-	fileProc->Split_txt(conn , 3 , "datasets/output3.txt",0.3,0.6,0.1);
-	fileProc->Split_txt(conn , 4 , "datasets/output4.txt",0.3,0.4,0.3);
-	fileProc->Split_txt(conn , 5 , "datasets/output5.txt",0.2,0.5,0.3);
-	
+	fileProc->Split_txt(conn , 1 , "datasets/output.txt",0.1,0.4,0.5 , Mode);
+	fileProc->Split_txt(conn , 2 , "datasets/output2.txt",0.2,0.6,0.2 , Mode);
+	fileProc->Split_txt(conn , 3 , "datasets/output3.txt",0.3,0.6,0.1 , Mode);
+	fileProc->Split_txt(conn , 4 , "datasets/output4.txt",0.3,0.4,0.3 , Mode);
+	fileProc->Split_txt(conn , 5 , "datasets/output5.txt",0.2,0.5,0.3 , Mode);
 
-
+	fileProc->clean_table(conn , 1 , 5 , Mode);
 		
 
 

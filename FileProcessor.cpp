@@ -43,7 +43,9 @@ void FileProcessor::close_db(MYSQL*& conn){
 	std::cout<<"Close database successfully!"<<std::endl;
 }
 
-void FileProcessor::create_table(MYSQL*& conn, int tableNo){
+int FileProcessor::create_table(MYSQL*& conn, int tableNo , bool df){
+	if(!df)
+		return 0;
 	std::string tableName = "test_data";
 	tableName = tableName + std::to_string(tableNo);
 	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
@@ -52,16 +54,16 @@ void FileProcessor::create_table(MYSQL*& conn, int tableNo){
 		exit(1);
 	}
 
-	std::string tableName = "train_data";
+	tableName = "train_data";
 	tableName = tableName + std::to_string(tableNo);
-	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error train_data creation"<<mysql_error(conn);
 		exit(1);
 	}
-	std::string tableName = "val_data";
+	tableName = "val_data";
 	tableName = tableName + std::to_string(tableNo);
-	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error val_data creation"<<mysql_error(conn);
 		exit(1);
@@ -73,10 +75,13 @@ void FileProcessor::create_table(MYSQL*& conn, int tableNo){
 
 
 	std::cout<<"Create table successfully!"<<std::endl;
+	return 0;
 }
 
 
-void FileProcessor::clean_table(MYSQL*& conn, int startNo , int endNo){
+int FileProcessor::clean_table(MYSQL*& conn, int startNo , int endNo , bool df){
+	if(df)
+		return 0;
 	while(startNo <= endNo){
 		std::string test = "test_data";
 		std::string train = "train_data";
@@ -94,6 +99,7 @@ void FileProcessor::clean_table(MYSQL*& conn, int startNo , int endNo){
 
 	}
 	std::cout<<"Clean table successfully!"<<std::endl;
+	return 0;
 }
 
 
@@ -149,7 +155,9 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 //
 // NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
-int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , float trainv , float testv , float valv ){
+int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , float trainv , float testv , float valv , bool df){
+	if(!df)
+		return 0;
 	if((trainv + testv + valv)!= 1.0){
 		std::cout<<"Split Proportion Error"<<std::endl;
 		return 0;
