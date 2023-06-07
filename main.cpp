@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 #include "mysql/mysql.h"
+#include "crow.h"
 
 #include "LSTMNet.h"
 #include "DataProcessor.h"
@@ -58,9 +59,12 @@ void add_person_data(MYSQL *conn, const char *name, const char *sex, const char 
     	}
 }
 */
-int msq(){
-	
-	return 0;
+int msq(){	
+
+
+
+
+	return printf("Data added ly!\n");
 	
 	/*	Test Code	*/
 	//MYSQL *conn = mysql_init(NULL);
@@ -407,11 +411,19 @@ int main() {
 	
 	msq();
 
+	crow::SimpleApp app;
+	
+	CROW_ROUTE(app, "/")([](){
+		msq();
+		return "Single touch"; 
+	});
 
 
-    dataconvert();	
-    std::cout<<"-----multivariate starts now-----"<<std::endl;
-    // predicting multivariate series
-    //multivarPredicts();
+	app.port(8888).multithreaded().run();
+
+    	dataconvert();	
+    	std::cout<<"-----multivariate starts now-----"<<std::endl;
+    	// predicting multivariate series
+   	//multivarPredicts();
 
 }
