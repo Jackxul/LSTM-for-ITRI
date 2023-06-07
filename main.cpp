@@ -417,7 +417,12 @@ int main() {
 		msq();
 		return "Single touch"; 
 	});
-
+	CROW_ROUTE(app, "/json")
+	([]{
+    		crow::json::wvalue x({{"message", "Hello, World!"}});
+    		x["message2"] = "Hello, World.. Again!";
+    		return x;
+	});
 
 	app.port(8888).multithreaded().run();
 
