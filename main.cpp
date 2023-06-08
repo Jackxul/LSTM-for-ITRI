@@ -12,12 +12,12 @@
 
 #include "mysql/mysql.h"
 #include "crow.h"
-
+//#include "crow/tower.h"
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
-#define Mode false // true: create table, false: clean table
-
+//#define Mode false // true: create table, false: clean table
+bool Mode = false;
 
 /*
  *index  			---> int 
@@ -456,9 +456,42 @@ int main() {
 	});
 	CROW_ROUTE(app, "/json")
 	([]{
-    		crow::json::wvalue x({{"message", "Hello, World!"}});
-    		x["message2"] = "Hello, World.. Again!";
+    		crow::json::wvalue x({{"message1", "Test Code!"}});
+    		x["message2"] = "Whats up!";
     		return x;
+	});
+	
+//	CROW_ROUTE(app, "/cr")
+//	([](const crow::request& req, crow::response& res){
+//	 	crow::http::request apiRequest;
+//		apiRequest.method = 'GET';
+//		apiRequest.url = "/cr2";
+//		auto apiResponse = crow::http::send(apiRequest);
+//		if(apiResponse){
+//			res.body = apiResponse->body;
+//			res.code = apiResponse->code;
+//			res.set_header("Content-Type", apiResponse->get_header_value("Content-Type"));
+//			res.write("Table Created");
+//		}else{
+//			res.code = 500;
+//			res.body = "Table Creation Failed";
+//		}
+//		res.end();
+//
+//    		return res;
+//	});
+	CROW_ROUTE(app, "/cr2")
+	([]{
+	 	Mode = true;	
+		dataconvert();
+    		return "Finish Table Creation";
+	});
+
+	CROW_ROUTE(app, "/cl")
+	([]{
+	 	Mode = false;
+		dataconvert();
+    		return "Table Clean Up";
 	});
 
 	app.bindaddr("192.168.127.76").port(8888).multithreaded().run();
