@@ -31,19 +31,20 @@ bool Mode = false;
  *Total delay			---> float
  * */
 
+/*Data Rec Structure*/
+struct DataRec{
+	int index;
+	char date[20];
+	float handover;
+	float DRB_RlcDelayUL;
+	float DRB_AirlfDelayUL;
+	float DRB_RlcSduDelayDL;
+	float DRB_AirlfDelayDL;
+	float total_delay;
+};
 
 FileProcessor * fileProc;
 
-void Insert_table(MYSQL *conn, int index, const char *date, float handover, float DRB_RlcDelayUL, float DRB_AirlfDelayUL, float DRB_RlcSduDelayDL, float DRB_AirlfDelayDL, float total_delay) {
-    char query[200];
-    sprintf(query, "INSERT INTO lstm ( line_id, date, handover, DRB_RlcDelayUL, DRB_AirlfDelayUL, DRB_RlcSduDelayDL, DRB_AirlfDelayDL, total_delay) VALUES (%d, '%s', %f, %f , %f , %f , %f , %f)", index, date, handover, DRB_RlcDelayUL, DRB_AirlfDelayUL , DRB_RlcSduDelayDL, DRB_AirlfDelayDL, total_delay);
-
-    if (mysql_query(conn, query) != 0) {
-        fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
-    } else {
-        printf("Data added successfully!\n");
-    }
-}
 /*
 Test Code
 
