@@ -48,7 +48,7 @@ int FileProcessor::create_table(MYSQL*& conn, int tableNo , bool df){
 		return 0;
 	std::string tableName = "test_data";
 	tableName = tableName + std::to_string(tableNo);
-	std::string sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	std::string sql = "CREATE TABLE " + tableName + " ( count INT , id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error test_data creation"<<mysql_error(conn);
 		exit(1);
@@ -56,14 +56,14 @@ int FileProcessor::create_table(MYSQL*& conn, int tableNo , bool df){
 
 	tableName = "train_data";
 	tableName = tableName + std::to_string(tableNo);
-	sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	sql = "CREATE TABLE " + tableName + " ( count INT , id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error train_data creation"<<mysql_error(conn);
 		exit(1);
 	}
 	tableName = "val_data";
 	tableName = tableName + std::to_string(tableNo);
-	sql = "CREATE TABLE " + tableName + " ( id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
+	sql = "CREATE TABLE " + tableName + " ( count INT , id INT , date VARCHAR(255) , handover FLOAT, DRB_RlcDelayUL  FLOAT , DRB_AirlfDelayUL FLOAT , DRB_RlcSduDelayDL FLOAT , DRB_AirlfDelayDL FLOAT , total_delay FLOAT , PRIMARY KEY(id))";
 	if(mysql_query(conn,sql.c_str())){
 		std::cout<<"Error val_data creation"<<mysql_error(conn);
 		exit(1);
@@ -104,9 +104,9 @@ int FileProcessor::clean_table(MYSQL*& conn, int startNo , int endNo , bool df){
 
 
 // NDY //
-void FileProcessor::add_data(MYSQL*& conn , std::string tableName , int line_id , char *date , float handover , float DRB_RlcDelayUL , float DRB_AirlfDelayUL , float DRB_RlcSduDelayDL , float DRB_AirlfDelayDL , float total_delay){
+void FileProcessor::add_data(MYSQL*& conn , std::string tableName ,int checkcount , int line_id , char *date , float handover , float DRB_RlcDelayUL , float DRB_AirlfDelayUL , float DRB_RlcSduDelayDL , float DRB_AirlfDelayDL , float total_delay){
 	char query[200];
-	sprintf(query,"INSERT INTO %s VALUES(%d,'%s',%f,%f,%f,%f,%f,%f)",tableName.c_str(),line_id,date,handover,DRB_RlcDelayUL,DRB_AirlfDelayUL,DRB_RlcSduDelayDL,DRB_AirlfDelayDL,total_delay);
+	sprintf(query,"INSERT INTO %s VALUES(%d,%d,'%s',%f,%f,%f,%f,%f,%f)",tableName.c_str(),checkcount,line_id,date,handover,DRB_RlcDelayUL,DRB_AirlfDelayUL,DRB_RlcSduDelayDL,DRB_AirlfDelayDL,total_delay);
 
     if (mysql_query(conn, query) != 0) {
         fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
@@ -162,7 +162,7 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , f
 		std::cout<<"Split Proportion Error"<<std::endl;
 		return 0;
 	}
-
+	int checkcount = 0;
 	int _index;
 	char _date[20];
 	float _handover;
@@ -262,9 +262,10 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , f
 			std::cout<<_DRB_AirlfDelayDL<<",";
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
-			add_data(conn,test,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
-			
+			add_data(conn,test,checkcount,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
+			checkcount++;
 		}
+		checkcount = 0;
 		//std::cout<<"testEnd"<<std::endl;
 
 		//Val
@@ -319,12 +320,13 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , f
 			std::cout<<_DRB_AirlfDelayDL<<",";
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
-			add_data(conn,val,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
+			add_data(conn,val,checkcount,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
+			checkcount++;
 		}
 		//std::cout<<"valEnd"<<std::endl;
 
 		//Train
-		
+		checkcount = 0;
 		while(lineNo < trainNo && getline(file,line)){
 			lineNo++;
 			//std::cout<<line<<std::endl;
@@ -377,9 +379,10 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , f
 			std::cout<<_DRB_AirlfDelayDL<<",";
 			std::cout<<_total_delay;
 			std::cout<<std::endl;
-			add_data(conn,train,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
+			add_data(conn,train,checkcount,_index,_date,_handover,_DRB_RlcDelayUL,_DRB_AirlfDelayUL,_DRB_RlcSduDelayDL,_DRB_AirlfDelayDL,_total_delay);
+			checkcount++;
 		}
-		
+		checkcount = 0;
 		//std::cout<<"trainEnd"<<std::endl;
 
         	file.close();
