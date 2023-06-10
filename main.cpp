@@ -59,6 +59,9 @@ void add_person_data(MYSQL *conn, const char *name, const char *sex, const char 
     	}
 }
 */
+
+
+
 int msq(){	
 
 
@@ -178,6 +181,18 @@ void dataconvert(){
 
 
 		/*MYSQL*/
+}
+
+void datarec(){
+	MYSQL* conn;
+	fileProc->connect_db(conn);
+	std::cout<<"connect successfully!"<<std::endl;
+
+
+    	char query[200];
+    	sprintf(query, "SELECT * FROM test_data1");
+
+	fileProc->close_db(conn);
 }
 int multivarPredicts() {
 
