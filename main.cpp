@@ -9,7 +9,9 @@
 #define CROW_JSON_USE_MAP
 #include <vector>
 #include <unistd.h>
-
+#include <iostream>
+#include <string>
+#include <curl/curl.h>
 #include "mysql/mysql.h"
 #include "crow.h"
 //#include "crow/tower.h"
@@ -183,15 +185,51 @@ void dataconvert(){
 		/*MYSQL*/
 }
 
-void datarec(){
+void datarec(std::string table_name){
 	MYSQL* conn;
+
+
+	std::string query = "SELECT * FROM " + table_name +" WHERE count < 500";	
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
+	
 
 
-    	char query[200];
-    	sprintf(query, "SELECT * FROM test_data1");
 
+	if (mysql_query(conn, query.c_str())){
+		std::cerr << "Failed to execute query: " << mysql_error(conn) << std::endl;
+	}
+
+
+	MYSQL_RES* result = mysql_store_result(conn);
+		if (!result) {
+	        	std::cerr << "Failed to retrieve result set: " << mysql_error(conn) << std::endl;
+	    	}
+
+	std::vector<DataRec> DataVector;
+	MYSQL_ROW row;
+	while((row = mysql_fetch_row(result))) {
+		DataRec datarec;
+
+		datarec.index = std::stoi(row[1]);
+		
+		strncpy(datarec.date, row[2], 16);
+
+		datarec.handover = std::stof(row[3]);
+		datarec.DRB_RlcDelayUL = std::stof(row[4]);
+		datarec.DRB_AirlfDelayUL = std::stof(row[5]);
+		datarec.DRB_RlcSduDelayDL = std::stof(row[6]);
+		datarec.DRB_AirlfDelayDL = std::stof(row[7]);
+		datarec.total_delay = std::stof(row[8]);
+
+		DataVector.push_back(datarec);
+	}
+	
+	for(const auto& datarec : DataVector) {
+		std::cout << datarec.index << " " << datarec.date << " " << datarec.handover << " " << datarec.DRB_RlcDelayUL << " " << datarec.DRB_AirlfDelayUL << " " << datarec.DRB_RlcSduDelayDL << " " << datarec.DRB_AirlfDelayDL << " " << datarec.total_delay << std::endl;
+	}
+
+	mysql_free_result(result);
 	fileProc->close_db(conn);
 }
 int multivarPredicts() {
@@ -422,6 +460,31 @@ int multivarPredicts() {
 }
 
 
+//curl/curl.h functions
+size_t curlWriteCallback(void* contents, size_t size, size_t nmemb, std::string* response) {
+   	size_t totalSize = size * nmemb;
+    	response->append((char*)contents, totalSize);
+    	return totalSize;
+}
+
+std::string makeApiCall(const std::string& url) {
+    	CURL* curl = curl_easy_init();
+    	std::string response;
+
+    	if (curl) {
+    		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    	    	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);
+    	    	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+    	    	CURLcode res = curl_easy_perform(curl);
+    	    	if (res != CURLE_OK) {
+    	    	    std::cerr << "Failed to perform API call: " << curl_easy_strerror(res) << std::endl;
+    	    	}
+    	    	curl_easy_cleanup(curl);
+    	}
+
+    	return response;
+}
+
 int main() {
 	
 	msq();
@@ -513,6 +576,44 @@ int main() {
 //
 //    		return res;
 //	});
+//
+//
+//
+	CROW_ROUTE(app, "/ttd1")
+	([&app](const crow::request& req, crow::response& res){
+
+	//	datarec("test_data1");
+		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
+		
+		        // Use the response from the API call in the current response
+		res.write(apiResponse);
+		res.end();
+	});
+
+	CROW_ROUTE(app, "/ttd2")
+	([]{
+		datarec("test_data2");
+    		return "Finish Table Parse";
+	});
+
+	CROW_ROUTE(app, "/ttd3")
+	([]{
+		datarec("test_data3");
+    		return "Finish Table Parse";
+	});
+
+	CROW_ROUTE(app, "/ttd4")
+	([]{
+		datarec("test_data4");
+    		return "Finish Table Parse";
+	});
+
+	CROW_ROUTE(app, "/ttd5")
+	([]{
+		datarec("test_data5");
+    		return "Finish Table Parse";
+	});
+
 	CROW_ROUTE(app, "/cr2")
 	([]{
 	 	Mode = true;	

@@ -65,7 +65,7 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	echo debug_make
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS} -lmysqlclient 
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS} -lmysqlclient -lcurl
 
 ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -75,7 +75,7 @@ ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 ${OBJECTDIR}/FileProcessor.o: FileProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileProcessor.o FileProcessor.cpp -lmysqlclient
+	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileProcessor.o FileProcessor.cpp -lmysqlclient 
 
 ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -86,7 +86,7 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	echo test
-	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -lmysqlclient -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -std=c++14 -MMD -MP -MF "$@.d" -lmysqlclient -lcurl -o ${OBJECTDIR}/main.o main.cpp 
 
 # Subprojects
 .build-subprojects:

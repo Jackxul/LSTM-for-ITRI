@@ -64,7 +64,7 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	echo release_make
-	${LINK.cc}  -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS} -lmysqlclient 
+	${LINK.cc}  -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS} -lmysqlclient
 
 ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -84,8 +84,7 @@ ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d"  -o ${OBJECTDIR}/main.o main.cpp
-
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -lcurl -o ${OBJECTDIR}/main.o main.cpp 
 # Subprojects
 .build-subprojects:
 
