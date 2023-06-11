@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
+#include <json.hpp>
 #include "mysql/mysql.h"
 #include "crow.h"
 //#include "crow/tower.h"
@@ -20,6 +21,9 @@
 #include "FileProcessor.h"
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
+
+
+using json = nlohmann::json;
 
 /*
  *index  			---> int 
@@ -585,8 +589,12 @@ int main() {
 	//	datarec("test_data1");
 		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
 		
-		        // Use the response from the API call in the current response
-		res.write(apiResponse);
+		// Use the response from the API call in the current response
+		
+		json jsonResponse = json::parse(apiResponse);
+		std::string message = jsonResponse.dump(4);
+		res.set_header("Content-Type", "application/json");
+		res.write(message);
 		res.end();
 	});
 
