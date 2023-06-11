@@ -119,17 +119,6 @@ void dataconvert(){
 	fileProc = new FileProcessor();
     ////////// Converting the CVS ////////////////////////    
     
-        
-//    fileProc->writeUniVariate("datasets/internetTrafficData.csv","datasets/InternetTraff.txt",2,1);
-//    fileProc->writeUniVariate("datasets/monthlyReturnsOfValueweighted.csv","datasets/monthlyReturnsOfValueweighted.txt",2,1);
-//    fileProc->writeUniVariate("datasets/treeAlmagreMountainPiarLocat.csv","datasets/treeAlmagreMountainPiarLocat.txt",2,1);
-//    fileProc->writeUniVariate("datasets/dailyCyclistsAlongSudurlandsb.csv","datasets/dailyCyclistsAlongSudurlandsb.txt",2,1);
-//    fileProc->writeUniVariate("datasets/totalPopulation.csv","datasets/totalPopulation.txt",2,1);
-//    fileProc->writeUniVariate("datasets/numberOfUnemployed.csv","datasets/numberOfUnemployed.txt",2,1);
-//    fileProc->writeUniVariate("datasets/data.csv","datasets/data.txt",2,1);
-//    fileProc->writeUniVariate("datasets/monthlySunspotNumbers.csv","datasets/monthlySunspotNumbers.txt",2,1);
-//    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
-//fileProc->writeUniVariate("datasets/Test.csv","datasets/Test.txt",4,2);    
 
 //Multi Dataset File from Csv to Txt
 	fileProc->Csv_to_Txt("datasets/output.csv","datasets/output.txt");    
@@ -583,6 +572,7 @@ int main() {
 //
 //
 //
+	/*api call api*/
 	CROW_ROUTE(app, "/ttd1")
 	([&app](const crow::request& req, crow::response& res){
 
