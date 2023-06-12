@@ -21,7 +21,7 @@
 #include "FileProcessor.h"
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
-
+bool API_Mode = false;
 
 using json = nlohmann::json;
 
@@ -49,6 +49,7 @@ struct DataRec{
 	float total_delay;
 };
 
+std::vector<DataRec> DataVector;
 FileProcessor * fileProc;
 
 /*
@@ -180,9 +181,9 @@ void dataconvert(){
 
 void datarec(std::string table_name , int gNb_No){
 	MYSQL* conn;
-	
+	API_Mode = true;	
 	_gNb_No = gNb_No;
-
+	table_name = table_name + std::to_string(gNb_No);
 	std::string query = "SELECT * FROM " + table_name +" WHERE count < 500";	
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
@@ -200,7 +201,6 @@ void datarec(std::string table_name , int gNb_No){
 	        	std::cerr << "Failed to retrieve result set: " << mysql_error(conn) << std::endl;
 	    	}
 
-	std::vector<DataRec> DataVector;
 	MYSQL_ROW row;
 	while((row = mysql_fetch_row(result))) {
 		DataRec datarec;
@@ -486,61 +486,72 @@ int main() {
 	crow::SimpleApp app;
 	
 	CROW_ROUTE(app, "/")([](){
-		msq();
 		crow::json::wvalue::object outter;
 		crow::json::wvalue::object outter2;
-		int count = 0;
-		for(const auto& datarec : DataVector) {
-			//std::cout << datarec.index << " " << datarec.date << " " << datarec.handover << " " << datarec.DRB_RlcDelayUL << " " << datarec.DRB_AirlfDelayUL << " " << datarec.DRB_RlcSduDelayDL << " " << datarec.DRB_AirlfDelayDL << " " << datarec.total_delay << std::endl;
-			
-			if(count > 20 ){
-				break;
-			}else if(count == 20 ){
-				outter2.insert({_gNb_No, outter});
-			}
-			
-
+		if(!API_Mode && _gNb_No != -1){
 			crow::json::wvalue xul;
-			//xul["No"] = Jack_API_vec[0];
-			xul["1 : Date"] = datarec.date;
-			xul["2 : Handover"] = datarec.handover;
-			xul["3 : DRB_RlcUL"] = datarec.DRB_RlcDelayUL;
-			xul["4 : DRB_AirUL"] = datarec.DRB_AirlfDelayUL;
-			xul["5 : DRB_RlcDL"] = datarec.DRB_RlcSduDelayDL;
-			xul["6 : DRB_AirDL"] = datarec.DRB_AirlfDelayDL;
-			xul["7 : Total_Delay"] = datarec.total_delay;
-	
-			outter.insert({count, xul});
-			count++;
+			xul["Error403"] = "Direct Access , You Dummy";
+			outter2.insert({"Failed", xul});
+		}else if(!API_Mode && _gNb_No == -1){
+			crow::json::wvalue xul;
+			xul["Error404"] = "Wrong Table Name , Page Not Found";
+			outter2.insert({"Failed", xul});
 		}
-		//Test code
-		/*std::string Jack_Data[] = {
-		" A , 00 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 01 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 02 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 03 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 04 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 05 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 06 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 07 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 08 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 09 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 10 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 11 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 12 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 13 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 14 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 15 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 16 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 17 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 18 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 19 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 20 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359"};*/
-		//std::string Jack_Data = "1 , 2021/05/04 , 0.9848321 , 0.2212332 , 0.1321234 , 0.4267235 , 0.1472382 , 0.3428362";
+		else{
+			int count = 0;
+			for(const auto& datarec : DataVector) {
+				
+				if(count > 20 ){
+					break;
+				}else if(count == 20 ){
+					outter2.insert({std::to_string(_gNb_No), outter});
+				}
+				
+
+				crow::json::wvalue xul;
+				//xul["No"] = Jack_API_vec[0];
+				xul["1 : Date"] = datarec.date;
+				xul["2 : Handover"] = datarec.handover;
+				xul["3 : DRB_RlcUL"] = datarec.DRB_RlcDelayUL;
+				xul["4 : DRB_AirUL"] = datarec.DRB_AirlfDelayUL;
+				xul["5 : DRB_RlcDL"] = datarec.DRB_RlcSduDelayDL;
+				xul["6 : DRB_AirDL"] = datarec.DRB_AirlfDelayDL;
+				xul["7 : Total_Delay"] = datarec.total_delay;
 		
-		//std::map<std::string, crow::json::wvalue> response(outter2.begin(), outter2.end());
-		//crow::json::wvalue response1{response};
-		//return crow::response(response1);
+				outter.insert({std::to_string(count), xul});
+				count++;
+			}
+			//Test code
+			/*std::string Jack_Data[] = {
+			" A , 00 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 01 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 02 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 03 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 04 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 05 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 06 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 07 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 08 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 09 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 10 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 11 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 12 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 13 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 14 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 15 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 16 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 17 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 18 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 19 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
+			" A , 20 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359"};*/
+			//std::string Jack_Data = "1 , 2021/05/04 , 0.9848321 , 0.2212332 , 0.1321234 , 0.4267235 , 0.1472382 , 0.3428362";
+			
+			//std::map<std::string, crow::json::wvalue> response(outter2.begin(), outter2.end());
+			//crow::json::wvalue response1{response};
+			//return crow::response(response1);
+		}
+		API_Mode = false;
+		_gNb_No = 0;
 		crow::json::wvalue response1{outter2};
 		return crow::response(response1);
 
@@ -575,10 +586,14 @@ int main() {
 //
 //
 	/*api call api*/
-	CROW_ROUTE(app, "/ttd1")
-	([&app](const crow::request& req, crow::response& res){
-
-		datarec("test_data1" , 1);
+	CROW_ROUTE(app, "/ttd/<string>")
+	([&app](const crow::request& req, crow::response& res, const std::string& ids){
+		int id = std::stoi(ids);
+		if(id > 0 && id <= 5){
+			datarec("test_data" , id);
+		}else{
+			_gNb_No = -1;	
+		}
 		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
 		
 		// Use the response from the API call in the current response
@@ -590,31 +605,45 @@ int main() {
 		res.end();
 	});
 
-	CROW_ROUTE(app, "/ttd2")
-	([]{
-		datarec("test_data2" , 2);
-    		return "Finish Table Parse";
+	CROW_ROUTE(app, "/trd/<string>")
+	([&app](const crow::request& req, crow::response& res, const std::string& ids){
+	 	int id = std::stoi(ids);
+		if(id > 0 && id <= 5){
+			datarec("train_data" , id);
+		}else{
+			_gNb_No = -1;
+		}
+		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
+		
+		// Use the response from the API call in the current response
+		
+		json jsonResponse = json::parse(apiResponse);
+		std::string message = jsonResponse.dump(4);
+		res.set_header("Content-Type", "application/json");
+		res.write(message);
+		res.end();
 	});
 
-	CROW_ROUTE(app, "/ttd3")
-	([]{
-		datarec("test_data3" , 3);
-    		return "Finish Table Parse";
+	CROW_ROUTE(app, "/vld/<string>")
+	([&app](const crow::request& req, crow::response& res, const std::string& ids){
+	 	int id = std::stoi(ids);
+		if(id > 0 && id <= 5){
+			datarec("val_data" , id);
+		}else{
+			_gNb_No = -1;
+		}
+		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
+		
+		// Use the response from the API call in the current response
+		
+		json jsonResponse = json::parse(apiResponse);
+		std::string message = jsonResponse.dump(4);
+		res.set_header("Content-Type", "application/json");
+		res.write(message);
+		res.end();
 	});
 
-	CROW_ROUTE(app, "/ttd4")
-	([]{
-		datarec("test_data4" , 4);
-    		return "Finish Table Parse";
-	});
-
-	CROW_ROUTE(app, "/ttd5")
-	([]{
-		datarec("test_data5" , 5);
-    		return "Finish Table Parse";
-	});
-
-	CROW_ROUTE(app, "/cr2")
+	CROW_ROUTE(app, "/cr")
 	([]{
 	 	Mode = true;	
 		dataconvert();
@@ -630,7 +659,7 @@ int main() {
 
 	app.bindaddr("192.168.127.76").port(8888).multithreaded().run();
 
-    	dataconvert();	
+    	//dataconvert();	
     	std::cout<<"-----multivariate starts now-----"<<std::endl;
     	// predicting multivariate series
    	//multivarPredicts();
