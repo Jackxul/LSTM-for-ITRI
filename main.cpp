@@ -36,7 +36,7 @@ using json = nlohmann::json;
 
  *Total delay			---> float
  * */
-
+int _gNb_No = 0;
 /*Data Rec Structure*/
 struct DataRec{
 	int index;
@@ -178,9 +178,10 @@ void dataconvert(){
 		/*MYSQL*/
 }
 
-void datarec(std::string table_name){
+void datarec(std::string table_name , int gNb_No){
 	MYSQL* conn;
-
+	
+	_gNb_No = gNb_No;
 
 	std::string query = "SELECT * FROM " + table_name +" WHERE count < 500";	
 	fileProc->connect_db(conn);
@@ -486,7 +487,34 @@ int main() {
 	
 	CROW_ROUTE(app, "/")([](){
 		msq();
-		std::string Jack_Data[] = {
+		crow::json::wvalue::object outter;
+		crow::json::wvalue::object outter2;
+		int count = 0;
+		for(const auto& datarec : DataVector) {
+			//std::cout << datarec.index << " " << datarec.date << " " << datarec.handover << " " << datarec.DRB_RlcDelayUL << " " << datarec.DRB_AirlfDelayUL << " " << datarec.DRB_RlcSduDelayDL << " " << datarec.DRB_AirlfDelayDL << " " << datarec.total_delay << std::endl;
+			
+			if(count > 20 ){
+				break;
+			}else if(count == 20 ){
+				outter2.insert({_gNb_No, outter});
+			}
+			
+
+			crow::json::wvalue xul;
+			//xul["No"] = Jack_API_vec[0];
+			xul["1 : Date"] = datarec.date;
+			xul["2 : Handover"] = datarec.handover;
+			xul["3 : DRB_RlcUL"] = datarec.DRB_RlcDelayUL;
+			xul["4 : DRB_AirUL"] = datarec.DRB_AirlfDelayUL;
+			xul["5 : DRB_RlcDL"] = datarec.DRB_RlcSduDelayDL;
+			xul["6 : DRB_AirDL"] = datarec.DRB_AirlfDelayDL;
+			xul["7 : Total_Delay"] = datarec.total_delay;
+	
+			outter.insert({count, xul});
+			count++;
+		}
+		//Test code
+		/*std::string Jack_Data[] = {
 		" A , 00 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
 		" A , 01 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
 		" A , 02 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
@@ -507,35 +535,9 @@ int main() {
 		" A , 17 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
 		" A , 18 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
 		" A , 19 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359",
-		" A , 20 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359"};
+		" A , 20 , 2021/05/03 , 0.9848320 , 0.2212331 , 0.1321231 , 0.4267233 , 0.1472371 , 0.3428359"};*/
 		//std::string Jack_Data = "1 , 2021/05/04 , 0.9848321 , 0.2212332 , 0.1321234 , 0.4267235 , 0.1472382 , 0.3428362";
-		int count = 0;
-		crow::json::wvalue::object outter;
-		crow::json::wvalue::object outter2;
-		while(count < 21){
-			std::istringstream JAPI(Jack_Data[count]);
-			std::vector<std::string> Jack_API_vec;
-			std::string Jack_API_token;
-			while(std::getline(JAPI, Jack_API_token, ',')) {
-				Jack_API_vec.push_back(Jack_API_token);
-			}
-			crow::json::wvalue xul;
-			//xul["No"] = Jack_API_vec[0];
-			xul["1 : Date"] = Jack_API_vec[2];
-			xul["2 : Handover"] = Jack_API_vec[3];
-			xul["3 : DRB_RlcUL"] = Jack_API_vec[4];
-			xul["4 : DRB_AirUL"] = Jack_API_vec[5];
-			xul["5 : DRB_RlcDL"] = Jack_API_vec[6];
-			xul["6 : DRB_AirDL"] = Jack_API_vec[7];
-			xul["7 : Total_Delay"] = Jack_API_vec[8];
-			//outter["xul"] = xul;
-			outter.insert({Jack_API_vec[1], xul});
-			if(count == 20){
-				outter2.insert({Jack_API_vec[0], outter});
-			}
-			count++;
-		}
-
+		
 		//std::map<std::string, crow::json::wvalue> response(outter2.begin(), outter2.end());
 		//crow::json::wvalue response1{response};
 		//return crow::response(response1);
@@ -576,7 +578,7 @@ int main() {
 	CROW_ROUTE(app, "/ttd1")
 	([&app](const crow::request& req, crow::response& res){
 
-	//	datarec("test_data1");
+		datarec("test_data1" , 1);
 		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
 		
 		// Use the response from the API call in the current response
@@ -590,25 +592,25 @@ int main() {
 
 	CROW_ROUTE(app, "/ttd2")
 	([]{
-		datarec("test_data2");
+		datarec("test_data2" , 2);
     		return "Finish Table Parse";
 	});
 
 	CROW_ROUTE(app, "/ttd3")
 	([]{
-		datarec("test_data3");
+		datarec("test_data3" , 3);
     		return "Finish Table Parse";
 	});
 
 	CROW_ROUTE(app, "/ttd4")
 	([]{
-		datarec("test_data4");
+		datarec("test_data4" , 4);
     		return "Finish Table Parse";
 	});
 
 	CROW_ROUTE(app, "/ttd5")
 	([]{
-		datarec("test_data5");
+		datarec("test_data5" , 5);
     		return "Finish Table Parse";
 	});
 
