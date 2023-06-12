@@ -586,11 +586,21 @@ int main() {
 //
 //
 	/*api call api*/
-	CROW_ROUTE(app, "/ttd/<string>")
-	([&app](const crow::request& req, crow::response& res, const std::string& ids){
+	CROW_ROUTE(app, "/<string>/<string>")
+	([&app](const crow::request& req, crow::response& res, const std::string& tds, const std::string& ids){
 		int id = std::stoi(ids);
-		if(id > 0 && id <= 5){
+		char *td;
+		
+		td = (char*)tds.c_str();
+
+		//string compare
+		
+		if(!(strncmp(td,"ttd",3)) && id > 0 && id <= 5){
 			datarec("test_data" , id);
+		}else if(!(strncmp(td,"trd",3)) && id > 0 && id <= 5){
+			datarec("train_data" , id);
+		}else if(!(strncmp(td,"vld",3))&&id > 0 && id <= 5){
+			datarec("val_data" , id);
 		}else{
 			_gNb_No = -1;	
 		}
@@ -604,7 +614,7 @@ int main() {
 		res.write(message);
 		res.end();
 	});
-
+/*	Old Code
 	CROW_ROUTE(app, "/trd/<string>")
 	([&app](const crow::request& req, crow::response& res, const std::string& ids){
 	 	int id = std::stoi(ids);
@@ -642,7 +652,7 @@ int main() {
 		res.write(message);
 		res.end();
 	});
-
+*/
 	CROW_ROUTE(app, "/cr")
 	([]{
 	 	Mode = true;	
