@@ -22,7 +22,7 @@
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-
+#define datarec_size 20
 using json = nlohmann::json;
 
 /*
@@ -501,9 +501,9 @@ int main() {
 			int count = 0;
 			for(const auto& datarec : DataVector) {
 				
-				if(count > 20 ){
+				if(count > datarec_size ){
 					break;
-				}else if(count == 20 ){
+				}else if(count == datarec_size ){
 					outter2.insert({std::to_string(_gNb_No), outter});
 				}
 				
