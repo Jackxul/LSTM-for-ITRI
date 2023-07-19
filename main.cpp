@@ -22,7 +22,7 @@
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-
+#define datarec_size 20
 using json = nlohmann::json;
 
 /*
@@ -501,9 +501,9 @@ int main() {
 			int count = 0;
 			for(const auto& datarec : DataVector) {
 				
-				if(count > 20 ){
+				if(count > datarec_size ){
 					break;
-				}else if(count == 20 ){
+				}else if(count == datarec_size ){
 					outter2.insert({std::to_string(_gNb_No), outter});
 				}
 				
@@ -521,7 +521,6 @@ int main() {
 				outter.insert({std::to_string(count), xul});
 				count++;
 			}
-			
 		}
 		API_Mode = false;
 		_gNb_No = 0;
@@ -559,11 +558,28 @@ int main() {
 //
 //
 	/*api call api*/
-	CROW_ROUTE(app, "/ttd/<string>")
-	([&app](const crow::request& req, crow::response& res, const std::string& ids){
+	CROW_ROUTE(app, "/<string>/<string>")
+	([&app](const crow::request& req, crow::response& res, const std::string& tds, const std::string& ids){
 		int id = std::stoi(ids);
-		if(id > 0 && id <= 5){
+		char *td;
+		
+		td = (char*)tds.c_str();
+
+		//string compare
+		
+		
+		res.add_header("Access-Control-Allow-Origin", "*");
+        	res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        	res.add_header("Access-Control-Allow-Headers", "Content-Type");
+
+		
+
+		if(!(strncmp(td,"ttd",3)) && id > 0 && id <= 5){
 			datarec("test_data" , id);
+		}else if(!(strncmp(td,"trd",3)) && id > 0 && id <= 5){
+			datarec("train_data" , id);
+		}else if(!(strncmp(td,"vld",3))&&id > 0 && id <= 5){
+			datarec("val_data" , id);
 		}else{
 			_gNb_No = -1;	
 		}
@@ -577,7 +593,7 @@ int main() {
 		res.write(message);
 		res.end();
 	});
-
+/*	Old Code
 	CROW_ROUTE(app, "/trd/<string>")
 	([&app](const crow::request& req, crow::response& res, const std::string& ids){
 	 	int id = std::stoi(ids);
@@ -615,7 +631,7 @@ int main() {
 		res.write(message);
 		res.end();
 	});
-
+*/
 	CROW_ROUTE(app, "/cr")
 	([]{
 	 	Mode = true;	
