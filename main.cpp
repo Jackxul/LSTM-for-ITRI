@@ -22,7 +22,7 @@
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-#define datarec_size 20
+#define datarec_size 10
 using json = nlohmann::json;
 
 /*
@@ -510,13 +510,13 @@ int main() {
 
 				crow::json::wvalue xul;
 				//xul["No"] = Jack_API_vec[0];
-				xul["1 : Date"] = datarec.date;
-				xul["2 : Handover"] = datarec.handover;
-				xul["3 : DRB_RlcUL"] = datarec.DRB_RlcDelayUL;
-				xul["4 : DRB_AirUL"] = datarec.DRB_AirlfDelayUL;
-				xul["5 : DRB_RlcDL"] = datarec.DRB_RlcSduDelayDL;
-				xul["6 : DRB_AirDL"] = datarec.DRB_AirlfDelayDL;
-				xul["7 : Total_Delay"] = datarec.total_delay;
+				xul["Date"] = datarec.date;
+				xul["Handover"] = datarec.handover;
+				xul["DRB_RlcUL"] = datarec.DRB_RlcDelayUL;
+				xul["DRB_AirUL"] = datarec.DRB_AirlfDelayUL;
+				xul["DRB_RlcDL"] = datarec.DRB_RlcSduDelayDL;
+				xul["DRB_AirDL"] = datarec.DRB_AirlfDelayDL;
+				xul["Total_Delay"] = datarec.total_delay;
 		
 				outter.insert({std::to_string(count), xul});
 				count++;
@@ -593,45 +593,7 @@ int main() {
 		res.write(message);
 		res.end();
 	});
-/*	Old Code
-	CROW_ROUTE(app, "/trd/<string>")
-	([&app](const crow::request& req, crow::response& res, const std::string& ids){
-	 	int id = std::stoi(ids);
-		if(id > 0 && id <= 5){
-			datarec("train_data" , id);
-		}else{
-			_gNb_No = -1;
-		}
-		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
-		
-		// Use the response from the API call in the current response
-		
-		json jsonResponse = json::parse(apiResponse);
-		std::string message = jsonResponse.dump(4);
-		res.set_header("Content-Type", "application/json");
-		res.write(message);
-		res.end();
-	});
 
-	CROW_ROUTE(app, "/vld/<string>")
-	([&app](const crow::request& req, crow::response& res, const std::string& ids){
-	 	int id = std::stoi(ids);
-		if(id > 0 && id <= 5){
-			datarec("val_data" , id);
-		}else{
-			_gNb_No = -1;
-		}
-		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
-		
-		// Use the response from the API call in the current response
-		
-		json jsonResponse = json::parse(apiResponse);
-		std::string message = jsonResponse.dump(4);
-		res.set_header("Content-Type", "application/json");
-		res.write(message);
-		res.end();
-	});
-*/
 	CROW_ROUTE(app, "/cr")
 	([]{
 	 	Mode = true;	
