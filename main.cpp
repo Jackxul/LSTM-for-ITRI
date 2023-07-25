@@ -70,49 +70,7 @@ void add_person_data(MYSQL *conn, const char *name, const char *sex, const char 
 
 
 int msq(){	
-
-
-
-
 	return printf("Data added ly!\n");
-	
-	/*	Test Code	*/
-	//MYSQL *conn = mysql_init(NULL);
-	//const char *host = "localhost";
-	//const char *user = "root";
-	//const char *password = "Sql^JX45";
-	//const char *database = "Jacktest";
-	//MYSQL_RES *result;
-	//MYSQL_ROW row;
-	//if (conn == NULL) {
-   	//     fprintf(stderr, "Error initializing MySQL connection: %s\n", mysql_error(conn));
-   	//     return 1;
-   	// }
-   	//if (mysql_real_connect(conn, host, user, password, database, 0, NULL, 0) == NULL) {
-   	//     fprintf(stderr, "Error connecting to MySQL database: %s\n", mysql_error(conn));
-   	//     mysql_close(conn);
-   	//     return 1;
-   	//}
-
-   	//if (mysql_query(conn, "SELECT * FROM `lstm2`") != 0) {
-   	//     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
-   	//     mysql_close(conn);
-   	//     return 1;
-   	//}
-	//result = mysql_store_result(conn);
-	//add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-	//add_LTable(conn, 2, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-	//add_LTable(conn, 3, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-
-
-
-	//add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
-
-	//while ((row = mysql_fetch_row(result)) != NULL) {
-    	//	printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
-	//}
-	//mysql_free_result(result);
-    	//mysql_close(conn);
 }
 
 
@@ -580,6 +538,8 @@ int main() {
 			datarec("train_data" , id);
 		}else if(!(strncmp(td,"vld",3))&&id > 0 && id <= 5){
 			datarec("val_data" , id);
+		}else if(){ //for module output
+			datarec("module_data" , id);
 		}else{
 			_gNb_No = -1;	
 		}
