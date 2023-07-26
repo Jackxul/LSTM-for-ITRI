@@ -538,7 +538,7 @@ int main() {
 			datarec("train_data" , id);
 		}else if(!(strncmp(td,"vld",3))&&id > 0 && id <= 5){
 			datarec("val_data" , id);
-		}else if(){ //for module output
+		}else if(!(strncmp(td,"resd",4))&&id > 0 && id <= 5){ //for module output   => resd
 			datarec("module_data" , id);
 		}else{
 			_gNb_No = -1;	
