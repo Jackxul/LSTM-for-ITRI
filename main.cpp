@@ -10,6 +10,7 @@
 #include <vector>
 #include <unistd.h>
 #include <iostream>
+#include <thread>
 #include <string>
 #include <curl/curl.h>
 #include <json.hpp>
@@ -128,11 +129,20 @@ void dataconvert(){
 		/*MYSQL*/
 }
 
-void datarec(std::string table_name , int gNb_No){
+void datarec(std::string table_name , int gNb_No , std::string start_page){
+	while(true){
+		if(!DataVector.empty()){
+			DataVector.pop_back();
+		}else{
+			break;
+		}
+	}
+	std::cout<<"DataRec start!"<<std::endl;
+
 	MYSQL* conn;
 	API_Mode = true;	
-	std::string start_page = std::to_string(init_page);
-	std::string end_page = std::to_string(init_page + page_size);
+	start_page = std::to_string(stoi(start_page) * page_size);
+	std::string end_page = std::to_string(stoi(start_page) + page_size);
 	
 	_gNb_No = gNb_No;
 	table_name = table_name + std::to_string(gNb_No);
@@ -510,8 +520,8 @@ int main() {
 //
 //
 	/*api call api*/
-	CROW_ROUTE(app, "/<string>/<string>")
-	([&app](const crow::request& req, crow::response& res, const std::string& tds, const std::string& ids){
+	CROW_ROUTE(app, "/<string>/<string>/<string>")
+	([&app](const crow::request& req, crow::response& res, const std::string& tds, const std::string& ids, const std::string& pageinfo){
 		int id = std::stoi(ids);
 		char *td;
 		
@@ -527,14 +537,16 @@ int main() {
 		
 
 		if(!(strncmp(td,"ttd",3)) && id > 0 && id <= 5){
-			datarec("test_data" , id);
+			datarec("test_data" , id , pageinfo);
 		}else if(!(strncmp(td,"trd",3)) && id > 0 && id <= 5){
-			datarec("train_data" , id);
+			datarec("train_data" , id , pageinfo);
 		}else if(!(strncmp(td,"vld",3))&&id > 0 && id <= 5){
-			datarec("val_data" , id);
+			datarec("val_data" , id , pageinfo);
 		}else{
 			_gNb_No = -1;	
 		}
+		std::string apiResponse0 = makeApiCall("192.168.127.76:8888/");
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
 		
 		// Use the response from the API call in the current response
