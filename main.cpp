@@ -22,9 +22,9 @@
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-#define datarec_size 10	//data number per page(function can handle 10 data per time)
+#define datarec_size 10	//data number per page(function can handle 9 data per time)
 #define init_page 0	//initial page number
-#define page_size 10	//data number per page
+#define page_size 11	//data number per page
 using json = nlohmann::json;
 
 /*
@@ -545,9 +545,9 @@ int main() {
 		}else{
 			_gNb_No = -1;	
 		}
-		std::string apiResponse0 = makeApiCall("192.168.127.76:8888/");
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
+		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		//std::string apiResponse = makeApiCall("192.168.127.76:8888/");
 		
 		// Use the response from the API call in the current response
 		
