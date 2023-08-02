@@ -1,9 +1,9 @@
-//modify version
+//modify version for ITRI
 /* 
  * File:   main.cpp
  * Author: Jackxul
  *
- * Created on April 8, 2018, 12:46 PM
+ * Start from March 16, 2023, 14:52 
  */
 
 #define CROW_JSON_USE_MAP
@@ -15,25 +15,25 @@
 #include <json.hpp>
 #include "mysql/mysql.h"
 #include "crow.h"
-//#include "crow/tower.h"
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-#define datarec_size 10
+#define datarec_size 10	//data number per page(function can handle 10 data per time)
+#define init_page 0	//initial page number
+#define page_size 10	//data number per page
 using json = nlohmann::json;
 
 /*
  *index  			---> int 
  *Date  	 		---> char[20]
  *handover success rate  	---> float
- *DRB DRB_RlcDelayUL			---> float
- *DRB DRB_AirlfDelayUL			---> float
- *DRB DRB_RlcSduDelayDL			---> float
- *DRB DRB_AirlfDelayDL			---> float
-
+ *DRB DRB_RlcDelayUL		---> float
+ *DRB DRB_AirlfDelayUL		---> float
+ *DRB DRB_RlcSduDelayDL		---> float
+ *DRB DRB_AirlfDelayDL		---> float
  *Total delay			---> float
  * */
 int _gNb_No = 0;
@@ -52,20 +52,6 @@ struct DataRec{
 std::vector<DataRec> DataVector;
 FileProcessor * fileProc;
 
-/*
-Test Code
-
-void add_person_data(MYSQL *conn, const char *name, const char *sex, const char *height, const char *face) {
-    	char query[200];
-    	sprintf(query, "INSERT INTO person (name, sex, height, face) VALUES ('%s', '%s', '%s', '%s')", name, sex, height, face);
-    
-    	if (mysql_query(conn, query) != 0) {a
-        	fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
-    	} else {
-        	printf("Data added successfully!\n");
-    	}
-}
-*/
 
 
 
@@ -76,43 +62,6 @@ int msq(){
 
 	return printf("Data added ly!\n");
 	
-	/*	Test Code	*/
-	//MYSQL *conn = mysql_init(NULL);
-	//const char *host = "localhost";
-	//const char *user = "root";
-	//const char *password = "Sql^JX45";
-	//const char *database = "Jacktest";
-	//MYSQL_RES *result;
-	//MYSQL_ROW row;
-	//if (conn == NULL) {
-   	//     fprintf(stderr, "Error initializing MySQL connection: %s\n", mysql_error(conn));
-   	//     return 1;
-   	// }
-   	//if (mysql_real_connect(conn, host, user, password, database, 0, NULL, 0) == NULL) {
-   	//     fprintf(stderr, "Error connecting to MySQL database: %s\n", mysql_error(conn));
-   	//     mysql_close(conn);
-   	//     return 1;
-   	//}
-
-   	//if (mysql_query(conn, "SELECT * FROM `lstm2`") != 0) {
-   	//     fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
-   	//     mysql_close(conn);
-   	//     return 1;
-   	//}
-	//result = mysql_store_result(conn);
-	//add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-	//add_LTable(conn, 2, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-	//add_LTable(conn, 3, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
-
-
-
-	//add_person_data(conn, "Bob", "GAY", "0.01", "pathetic");
-
-	//while ((row = mysql_fetch_row(result)) != NULL) {
-    	//	printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
-	//}
-	//mysql_free_result(result);
-    	//mysql_close(conn);
 }
 
 
@@ -182,9 +131,12 @@ void dataconvert(){
 void datarec(std::string table_name , int gNb_No){
 	MYSQL* conn;
 	API_Mode = true;	
+	std::string start_page = std::to_string(init_page);
+	std::string end_page = std::to_string(init_page + page_size);
+	
 	_gNb_No = gNb_No;
 	table_name = table_name + std::to_string(gNb_No);
-	std::string query = "SELECT * FROM " + table_name +" WHERE count < 500";	
+	std::string query = "SELECT * FROM " + table_name +" WHERE count < " + end_page + " AND count >= " + start_page;	
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
 	
@@ -197,9 +149,9 @@ void datarec(std::string table_name , int gNb_No){
 
 
 	MYSQL_RES* result = mysql_store_result(conn);
-		if (!result) {
-	        	std::cerr << "Failed to retrieve result set: " << mysql_error(conn) << std::endl;
-	    	}
+	if (!result) {
+		std::cerr << "Failed to retrieve result set: " << mysql_error(conn) << std::endl;
+	}
 
 	MYSQL_ROW row;
 	while((row = mysql_fetch_row(result))) {
