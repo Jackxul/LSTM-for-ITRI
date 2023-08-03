@@ -22,9 +22,9 @@
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-#define datarec_size 10	//data number per page(function can handle 9 data per time)
+#define datarec_size 9	//data number per page(function can handle 10(0~9) data per time)
 #define init_page 0	//initial page number
-#define page_size 11	//data number per page
+#define page_size 10	//data number per page
 using json = nlohmann::json;
 
 /*
@@ -497,28 +497,6 @@ int main() {
     		return x;
 	});
 	
-//	CROW_ROUTE(app, "/cr")
-//	([](const crow::request& req, crow::response& res){
-//	 	crow::http::request apiRequest;
-//		apiRequest.method = 'GET';
-//		apiRequest.url = "/cr2";
-//		auto apiResponse = crow::http::send(apiRequest);
-//		if(apiResponse){
-//			res.body = apiResponse->body;
-//			res.code = apiResponse->code;
-//			res.set_header("Content-Type", apiResponse->get_header_value("Content-Type"));
-//			res.write("Table Created");
-//		}else{
-//			res.code = 500;
-//			res.body = "Table Creation Failed";
-//		}
-//		res.end();
-//
-//    		return res;
-//	});
-//
-//
-//
 	/*api call api*/
 	CROW_ROUTE(app, "/<string>/<string>/<string>")
 	([&app](const crow::request& req, crow::response& res, const std::string& tds, const std::string& ids, const std::string& pageinfo){
@@ -547,7 +525,6 @@ int main() {
 		}
 		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
 		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		//std::string apiResponse = makeApiCall("192.168.127.76:8888/");
 		
 		// Use the response from the API call in the current response
 		
