@@ -530,24 +530,31 @@ int main() {
 		res.end();
 	});
 
-	CROW_ROUTE(app, "/cr")
+	CROW_ROUTE(app, "/?cr")
 	([]{
 	 	Mode = true;	
 		dataconvert();
     		return "Finish Table Creation";
 	});
 
-	CROW_ROUTE(app, "/cl")
+	CROW_ROUTE(app, "/?cl")
 	([]{
 	 	Mode = false;
 		dataconvert();
     		return "Table Clean Up";
 	});
 
+	CROW_ROUTE(app, "/?lstmcal")
+	([]{
+   		
+    		std::cout<<"-----multivariate starts now-----"<<std::endl;
+	 	multivarPredicts();
+		
+	});
 	app.bindaddr("192.168.127.76").port(8888).multithreaded().run();
 
     	//dataconvert();	
-    	std::cout<<"-----multivariate starts now-----"<<std::endl;
+    	//std::cout<<"-----multivariate starts now-----"<<std::endl;
     	// predicting multivariate series
    	//multivarPredicts();
 
