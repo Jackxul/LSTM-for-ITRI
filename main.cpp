@@ -1,39 +1,40 @@
-//modify version
+//modify version for ITRI
 /* 
  * File:   main.cpp
  * Author: Jackxul
  *
- * Created on April 8, 2018, 12:46 PM
+ * Start from March 16, 2023, 14:52 
  */
 
 #define CROW_JSON_USE_MAP
 #include <vector>
 #include <unistd.h>
 #include <iostream>
+#include <thread>
 #include <string>
 #include <curl/curl.h>
 #include <json.hpp>
 #include "mysql/mysql.h"
 #include "crow.h"
-//#include "crow/tower.h"
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-#define datarec_size 10
+#define datarec_size 9	//data number per page(function can handle 10(0~9) data per time)
+#define init_page 0	//initial page number
+#define page_size 10	//data number per page
 using json = nlohmann::json;
 
 /*
  *index  			---> int 
  *Date  	 		---> char[20]
  *handover success rate  	---> float
- *DRB DRB_RlcDelayUL			---> float
- *DRB DRB_AirlfDelayUL			---> float
- *DRB DRB_RlcSduDelayDL			---> float
- *DRB DRB_AirlfDelayDL			---> float
-
+ *DRB DRB_RlcDelayUL		---> float
+ *DRB DRB_AirlfDelayUL		---> float
+ *DRB DRB_RlcSduDelayDL		---> float
+ *DRB DRB_AirlfDelayDL		---> float
  *Total delay			---> float
  * */
 int _gNb_No = 0;
@@ -52,20 +53,6 @@ struct DataRec{
 std::vector<DataRec> DataVector;
 FileProcessor * fileProc;
 
-/*
-Test Code
-
-void add_person_data(MYSQL *conn, const char *name, const char *sex, const char *height, const char *face) {
-    	char query[200];
-    	sprintf(query, "INSERT INTO person (name, sex, height, face) VALUES ('%s', '%s', '%s', '%s')", name, sex, height, face);
-    
-    	if (mysql_query(conn, query) != 0) {a
-        	fprintf(stderr, "Error executing MySQL query: %s\n", mysql_error(conn));
-    	} else {
-        	printf("Data added successfully!\n");
-    	}
-}
-*/
 
 
 
@@ -137,12 +124,24 @@ void dataconvert(){
 		/*MYSQL*/
 }
 
-void datarec(std::string table_name , int gNb_No){
+void datarec(std::string table_name , int gNb_No , std::string start_page){
+	while(true){
+		if(!DataVector.empty()){
+			DataVector.pop_back();
+		}else{
+			break;
+		}
+	}
+	std::cout<<"DataRec start!"<<std::endl;
+
 	MYSQL* conn;
 	API_Mode = true;	
+	start_page = std::to_string(stoi(start_page) * page_size);
+	std::string end_page = std::to_string(stoi(start_page) + page_size);
+	
 	_gNb_No = gNb_No;
 	table_name = table_name + std::to_string(gNb_No);
-	std::string query = "SELECT * FROM " + table_name +" WHERE count < 500";	
+	std::string query = "SELECT * FROM " + table_name +" WHERE count < " + end_page + " AND count >= " + start_page;	
 	fileProc->connect_db(conn);
 	std::cout<<"connect successfully!"<<std::endl;
 	
@@ -155,9 +154,9 @@ void datarec(std::string table_name , int gNb_No){
 
 
 	MYSQL_RES* result = mysql_store_result(conn);
-		if (!result) {
-	        	std::cerr << "Failed to retrieve result set: " << mysql_error(conn) << std::endl;
-	    	}
+	if (!result) {
+		std::cerr << "Failed to retrieve result set: " << mysql_error(conn) << std::endl;
+	}
 
 	MYSQL_ROW row;
 	while((row = mysql_fetch_row(result))) {
@@ -493,31 +492,9 @@ int main() {
     		return x;
 	});
 	
-//	CROW_ROUTE(app, "/cr")
-//	([](const crow::request& req, crow::response& res){
-//	 	crow::http::request apiRequest;
-//		apiRequest.method = 'GET';
-//		apiRequest.url = "/cr2";
-//		auto apiResponse = crow::http::send(apiRequest);
-//		if(apiResponse){
-//			res.body = apiResponse->body;
-//			res.code = apiResponse->code;
-//			res.set_header("Content-Type", apiResponse->get_header_value("Content-Type"));
-//			res.write("Table Created");
-//		}else{
-//			res.code = 500;
-//			res.body = "Table Creation Failed";
-//		}
-//		res.end();
-//
-//    		return res;
-//	});
-//
-//
-//
 	/*api call api*/
-	CROW_ROUTE(app, "/<string>/<string>")
-	([&app](const crow::request& req, crow::response& res, const std::string& tds, const std::string& ids){
+	CROW_ROUTE(app, "/<string>/<string>/<string>")
+	([&app](const crow::request& req, crow::response& res, const std::string& tds, const std::string& ids, const std::string& pageinfo){
 		int id = std::stoi(ids);
 		char *td;
 		
@@ -533,17 +510,16 @@ int main() {
 		
 
 		if(!(strncmp(td,"ttd",3)) && id > 0 && id <= 5){
-			datarec("test_data" , id);
+			datarec("test_data" , id , pageinfo);
 		}else if(!(strncmp(td,"trd",3)) && id > 0 && id <= 5){
-			datarec("train_data" , id);
+			datarec("train_data" , id , pageinfo);
 		}else if(!(strncmp(td,"vld",3))&&id > 0 && id <= 5){
-			datarec("val_data" , id);
-		}else if(!(strncmp(td,"resd",4))&&id > 0 && id <= 5){ //for module output   => resd
-			datarec("module_data" , id);
+			datarec("val_data" , id , pageinfo);
 		}else{
 			_gNb_No = -1;	
 		}
 		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
+		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		
 		// Use the response from the API call in the current response
 		
