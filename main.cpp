@@ -22,11 +22,19 @@
 //#define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
-#define datarec_size 9	//data number per page(function can handle 10(0~9) data per time)
+#define datarec_size 10	//data number per page(function can handle 10(0~9) data per time)
+#define filerow 8000	//file row number
 #define init_page 0	//initial page number
-#define page_size 10	//data number per page
+#define page_size datarec_size	//data number per page
 using json = nlohmann::json;
-
+int pgno = 0;//pagenumber for frontend
+float arrayforsplit[5][3] = {
+	{0.1,0.4,0.5 },
+	{0.2,0.6,0.2},
+	{0.3,0.6,0.1},
+	{0.3,0.4,0.3},
+	{0.2,0.5,0.3}
+};
 /*
  *index  			---> int 
  *Date  	 		---> char[20]
@@ -108,11 +116,11 @@ void dataconvert(){
 	fileProc->create_table(conn,5 , Mode);
 
 	//(val : test : train)
-	fileProc->Split_txt(conn , 1 , "datasets/output.txt",0.1,0.4,0.5 , Mode);
-	fileProc->Split_txt(conn , 2 , "datasets/output2.txt",0.2,0.6,0.2 , Mode);
-	fileProc->Split_txt(conn , 3 , "datasets/output3.txt",0.3,0.6,0.1 , Mode);
-	fileProc->Split_txt(conn , 4 , "datasets/output4.txt",0.3,0.4,0.3 , Mode);
-	fileProc->Split_txt(conn , 5 , "datasets/output5.txt",0.2,0.5,0.3 , Mode);
+	fileProc->Split_txt(conn , 1 ,  "datasets/output.txt",arrayforsplit[0][0],arrayforsplit[0][1],arrayforsplit[0][2] ,Mode);
+	fileProc->Split_txt(conn , 2 , "datasets/output2.txt",arrayforsplit[1][0],arrayforsplit[1][1],arrayforsplit[1][2] ,Mode);
+	fileProc->Split_txt(conn , 3 , "datasets/output3.txt",arrayforsplit[2][0],arrayforsplit[2][1],arrayforsplit[2][2] ,Mode);
+	fileProc->Split_txt(conn , 4 , "datasets/output4.txt",arrayforsplit[3][0],arrayforsplit[3][1],arrayforsplit[3][2] ,Mode);
+	fileProc->Split_txt(conn , 5 , "datasets/output5.txt",arrayforsplit[4][0],arrayforsplit[4][1],arrayforsplit[4][2] ,Mode);
 
 	fileProc->clean_table(conn , 1 , 5 , Mode);
 		
@@ -127,6 +135,7 @@ void dataconvert(){
 
 
 		/*MYSQL*/
+	free(fileProc);
 }
 
 void datarec(std::string table_name , int gNb_No , std::string start_page){
@@ -144,6 +153,19 @@ void datarec(std::string table_name , int gNb_No , std::string start_page){
 	start_page = std::to_string(stoi(start_page) * page_size);
 	std::string end_page = std::to_string(stoi(start_page) + page_size);
 	
+	if(strncmp(table_name.c_str() , "test_data" , 9) == 0){
+		pgno = (filerow*arrayforsplit[gNb_No-1][0]) - 1;
+		std::cout<<"pgno = "<<pgno<<std::endl;
+	}else if(strncmp(table_name.c_str() , "val_data" , 8) == 0){
+		pgno = (filerow*arrayforsplit[gNb_No-1][1]) - 1;
+		std::cout<<"pgno = "<<pgno<<std::endl;
+	}else if(strncmp(table_name.c_str() , "train_data" , 10) == 0){
+		pgno = (filerow*arrayforsplit[gNb_No-1][2]) - 1;
+		std::cout<<"pgno = "<<pgno<<std::endl;
+	}else{
+		std::cout<<"Table name error!"<<std::endl;
+	}
+
 	_gNb_No = gNb_No;
 	table_name = table_name + std::to_string(gNb_No);
 	std::string query = "SELECT * FROM " + table_name +" WHERE count < " + end_page + " AND count >= " + start_page;	
@@ -463,10 +485,11 @@ int main() {
 			int count = 0;
 			for(const auto& datarec : DataVector) {
 				
-				if(count > datarec_size ){
+				if(count > (datarec_size - 1) ){
 					break;
-				}else if(count == datarec_size ){
+				}else if(count == (datarec_size - 1) ){
 					outter2.insert({std::to_string(_gNb_No), outter});
+					outter2.insert({"pgno", pgno/10});
 				}
 				
 
@@ -479,7 +502,6 @@ int main() {
 				xul["DRB_RlcDL"] = datarec.DRB_RlcSduDelayDL;
 				xul["DRB_AirDL"] = datarec.DRB_AirlfDelayDL;
 				xul["Total_Delay"] = datarec.total_delay;
-		
 				outter.insert({std::to_string(count), xul});
 				count++;
 			}
@@ -534,6 +556,7 @@ int main() {
 		res.write(message);
 		res.end();
 	});
+
 
 	CROW_ROUTE(app, "/cr")
 	([]{
