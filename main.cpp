@@ -19,7 +19,7 @@
 #include "LSTMNet.h"
 #include "DataProcessor.h"
 #include "FileProcessor.h"
-//#define Mode false // true: create table, false: clean table
+//  #define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
 #define datarec_size 10	//data number per page(function can handle 10(0~9) data per time)
