@@ -545,7 +545,7 @@ int main() {
 		}else{
 			_gNb_No = -1;	
 		}
-		std::string apiResponse = makeApiCall("192.168.127.76:8888/");
+		std::string apiResponse = makeApiCall("127.0.0.1:8888/");
 		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		
 		// Use the response from the API call in the current response
@@ -572,7 +572,7 @@ int main() {
     		return "Table Clean Up";
 	});
 
-	app.bindaddr("192.168.127.76").port(8888).multithreaded().run();
+	app.bindaddr("127.0.0.1").port(8888).multithreaded().run();
 
     	//dataconvert();	
     	std::cout<<"-----multivariate starts now-----"<<std::endl;
