@@ -155,7 +155,7 @@ int FileProcessor::Delete_column(std::string fileName, std::string outFileName, 
 //
 // NFM //
 // 1:4:5 = datatest : datatest2 : datatraining = valFile : testFile : trainFile
-int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , float trainv , float testv , float valv , bool df){
+int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , float testv , float valv , float trainv , bool df){
 	if(!df)
 		return 0;
 	if((trainv + testv + valv)!= 1.0){
@@ -193,9 +193,9 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , f
 	
 	char* field = strtok(const_cast<char*>(line.c_str()), comma);	
 	int count = 0;
-	int trainNo = Show_p_row();
 	int testNo = (Show_p_row() * testv);
 	int valNo = (Show_p_row() * (testv + valv));
+	int trainNo = Show_p_row();
 
     	std::ifstream file (fileName);
 
