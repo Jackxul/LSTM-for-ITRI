@@ -200,15 +200,15 @@ int FileProcessor::Split_txt(MYSQL*& conn , int gNbNo , std::string fileName , f
     	std::ifstream file (fileName);
 
 	
-	std::cout<<"This is test code of enter Split function"<<std::endl;
+	//std::cout<<"This is test code of enter Split function"<<std::endl;
     	if (file.is_open()) {
 		//Test
 		
-		std::cout<<"This is test code of enter Split function"<<std::endl;
+		//std::cout<<"This is test code of enter Split function"<<std::endl;
 		
 		while(lineNo < testNo && getline(file,line)){
 			lineNo++;
-			std::cout<<"This is test code of enter Split while function"<<std::endl;
+			//std::cout<<"This is test code of enter Split while function"<<std::endl;
 			
 			//line[strcspn(line, "\n")] = '\0';
 			//field = strtok(line,comma);
