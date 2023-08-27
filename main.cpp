@@ -6,7 +6,6 @@
  * Start from March 16, 2023, 14:52 
  */
 
-#define CROW_JSON_USE_MAP
 #include <vector>
 #include <unistd.h>
 #include <iostream>
@@ -22,6 +21,7 @@
 //  #define Mode false // true: create table, false: clean table
 bool Mode = false;
 bool API_Mode = false;
+#define CROW_JSON_USE_MAP
 #define datarec_size 10	//data number per page(function can handle 10(0~9) data per time)
 #define filerow 8000	//file row number
 #define init_page 0	//initial page number
@@ -86,18 +86,6 @@ void dataconvert(){
 	fileProc->Delete_row("datasets/output3.txt","datasets/ADF3.txt",0);//Default off
 	fileProc->Delete_row("datasets/output4.txt","datasets/ADF4.txt",0);//Default off
 	fileProc->Delete_row("datasets/output5.txt","datasets/ADF5.txt",0);//Default off
-	/* Test function
-	 * fileProc->Set_row(1233);
-	 * fileProc->Set_col(4566);
-	 * fileProc->Delete_column("datasets/output2.csv","datasets/modify.txt",9);
-	 *
-	 *
-	 *
-	 *
-	
-	std::cout<<"ROW = "<<fileProc->Show_p_row()<<std::endl;
-	std::cout<<"COL = "<<fileProc->Show_p_col()<<std::endl;
-	*/
 	
 	MYSQL* conn;
 
@@ -125,7 +113,6 @@ void dataconvert(){
 
 
 
-	//add_LTable(conn, 1, "2018-04-08", 0.1, 0.2, 0.3, 0.4, 0.5, 0.6);
 	fileProc->close_db(conn);
 
 
@@ -226,7 +213,6 @@ int multivarPredicts() {
 	int targetValCol = 7;
 	
 	std::vector<double> * timeSeries;
-    //timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatraining.txt",lines,inputVecSize,colIndxs,targetValCol);
     timeSeries = fileProc->readMultivariate("datasets/train.txt",lines,inputVecSize,colIndxs,targetValCol);
     
     // Creating the input vector Array
@@ -252,7 +238,6 @@ int multivarPredicts() {
     int predictions = 2000; // prediction points
     lines = 2000; // lines read from the files
     
-    //timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatest.txt",lines,inputVecSize,colIndxs,targetValCol);
     timeSeries = fileProc->readMultivariate("datasets/test.txt",lines,inputVecSize,colIndxs,targetValCol);
     input = new std::vector<double>[1];
     double result;
@@ -522,7 +507,6 @@ int main() {
 		
 		td = (char*)tds.c_str();
 
-		//string compare
 		
 		
 		res.add_header("Access-Control-Allow-Origin", "*");
@@ -541,7 +525,6 @@ int main() {
 			_gNb_No = -1;	
 		}
 		std::string apiResponse = makeApiCall("127.0.0.1:8888/");
-		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		
 		// Use the response from the API call in the current response
 		
@@ -560,7 +543,7 @@ int main() {
     		return "Finish Table Creation";
 	});
 
-	CROW_ROUTE(app, "/?cl")
+	CROW_ROUTE(app, "/cl")
 	([]{
 	 	Mode = false;
 		dataconvert();
